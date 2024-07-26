@@ -1,6 +1,9 @@
+import Image from "next/image";
+
 export type userInfo = { 
     username: String,
-    pfpURL: String 
+    pfpURL: String,
+    status: String,
 }
 
 export default function profile(userInfo : userInfo) { 
@@ -8,7 +11,7 @@ export default function profile(userInfo : userInfo) {
 
     return ( 
         <div>
-            
+
         </div>
     );
 

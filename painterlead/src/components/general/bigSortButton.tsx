@@ -1,10 +1,15 @@
-export default function bigSortButton({ data } : {data: { name: string; color: string;}}) { 
-    const {name, color}  = data;
-    const style = ""
+export default function BigSortButton({name, color, active}: { name: String; color: String; active?: boolean}) { 
+    let style = "py-1 px-3 rounded-lg outline outline-" + color + " outline-4 hover:bg-" + color + "";
+    
+    if (active) { 
+        style = style + " active:bg-" + color;
+    }
+
+    console.log(style);
 
     return (
         <>
-            <button className="">{name}</button>
+            <button className={style}>{name}</button>
         </>
     );
 }
