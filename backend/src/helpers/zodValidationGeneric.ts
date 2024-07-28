@@ -9,7 +9,9 @@ export default function validateReq(schema: z.ZodObject<any>) {
             next();
         } catch (err) { 
             if (err instanceof ZodError) { 
-                res.status(400).json(err.flatten());
+                const error : {[key: string] : any} = {};
+                error["error"] = err.flatten();
+                res.status(400).json(error);
             } else { 
                 res.status(500).json({error: "Internal Sever Error"});
             }

@@ -6,7 +6,8 @@ const prisma = new PrismaClient();
 
 export default async function registerUser({ username, email, password } : {username: string, email: string, password:string}) { 
     try { 
-        const errors: {[key: string]: string} = {};
+        const errors: {[key: string]: any} = {};
+        errors["error"] = {}; 
         const user = UserSchema.parse({username, email, password});
         
         const findEmail = await prisma.user.findUnique({
@@ -16,7 +17,7 @@ export default async function registerUser({ username, email, password } : {user
         })
 
         if (findEmail) { 
-            errors.email = 'That email has already been registered.'
+            errors.error.email = 'That email has already been registered.'
         }
 
         const findUsername = await prisma.user.findUnique({
@@ -26,10 +27,10 @@ export default async function registerUser({ username, email, password } : {user
         })
 
         if (findUsername) { 
-            errors.username = 'That username has already been registered.'
+            errors.error.sername = 'That username has already been registered.'
         }
 
-        if (Object.keys(errors).length > 0){
+        if (errors.error !== null){
             return errors;
         }
 
