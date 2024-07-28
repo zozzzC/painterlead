@@ -1,10 +1,12 @@
 import express from "express";
 import registerUser from "../../controllers/signin/register"
 import { register } from "module";
+import { UserSchema } from "../../schema/user";
+import validateReq from "../../helpers/zodValidationGeneric";
 const router = express.Router();
 
 
-router.post("/", async (req: express.Request, res: express.Response) => { 
+router.post("/", validateReq(UserSchema), async (req: express.Request, res: express.Response) => { 
     try { 
         const { username, password, email } = req.body;
         const user = await registerUser({username, password, email});

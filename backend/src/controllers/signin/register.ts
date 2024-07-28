@@ -17,7 +17,7 @@ export default async function registerUser({ username, email, password } : {user
         })
 
         if (findEmail) { 
-            errors.error.email = 'That email has already been registered.'
+            errors.error.email.push('That email has already been registered.')
         }
 
         const findUsername = await prisma.user.findUnique({
@@ -27,10 +27,11 @@ export default async function registerUser({ username, email, password } : {user
         })
 
         if (findUsername) { 
-            errors.error.sername = 'That username has already been registered.'
+            errors.error.username.push('That username has already been registered.')
         }
 
-        if (errors.error !== null){
+
+        if (JSON.stringify(errors.error) !== '{}') { 
             return errors;
         }
 
