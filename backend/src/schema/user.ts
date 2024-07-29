@@ -14,3 +14,4 @@ export const UserSchema = z.object({
 
 type User = z.infer<typeof UserSchema>
 
+export const LoginUserSchema = UserSchema.omit({username: true})

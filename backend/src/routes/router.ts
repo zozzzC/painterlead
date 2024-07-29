@@ -3,8 +3,9 @@ const router = express.Router();
 
 import user from "./user"
 import register from "./signin/register"
+import logon from "./signin/logon"
 
-router.use("/user", user);
 router.use("/register", register);
+router.use("/login", logon);
 
 module.exports = router;
