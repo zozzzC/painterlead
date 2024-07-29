@@ -5,8 +5,6 @@ export default function BigSortButton({name, color, active}: { name: String; col
         style = style + " active:bg-" + color;
     }
 
-    console.log(style);
-
     return (
         <>
             <button className={style}>{name}</button>
