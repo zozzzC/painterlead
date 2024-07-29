@@ -23,10 +23,9 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body className={outfit.className}>
-      <div className="h-full flex flex-row">
-          <div className="h-full mr-10"><Sidebar/></div>
-          <div className="flex-grow">{children}</div>
-      </div>
+        <div className="h-full">
+        {children}
+        </div>
      </body>
     </html>
   );
