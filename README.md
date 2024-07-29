@@ -23,6 +23,7 @@ This is a personal project created with a Next.js frontend and an Express backen
 - React
 - Tailwind CSS
 - Storybook
+- Tanstack (React) Query
 
 ## Backend 
 - Typescript
