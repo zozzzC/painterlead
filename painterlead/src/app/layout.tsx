@@ -6,13 +6,14 @@ import { Outfit } from "next/font/google";
 import Footer from "@/components/layout/footer";
 
 const outfit = Outfit({
-  weight: '400',
-  subsets: ['latin']
-})
+  weight: "400",
+  subsets: ["latin"],
+});
 
 export const metadata: Metadata = {
   title: "painterlead",
-  description: "a new-era art search and commission platform. by artists, for artists.",
+  description:
+    "a new-era art search and commission platform. by artists, for artists.",
 };
 
 export default function RootLayout({
@@ -23,11 +24,8 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body className={outfit.className}>
-        <div className="h-full">
-        {children}
-        </div>
-     </body>
+        <div className="h-full">{children}</div>
+      </body>
     </html>
   );
 }
-
