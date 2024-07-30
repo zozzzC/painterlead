@@ -3,7 +3,7 @@
 import BigSortButton from "@/components/general/BigSortButton";
 
 //TODO: fix issue where passed in param for color does not change the actual color
-export default function register() {
+export default function Register() {
   return (
     <div className="flex justify-center h-full items-center">
       <div className="flex flex-col rounded-md outline outline-4 outline-light-grey w-72 h-96">

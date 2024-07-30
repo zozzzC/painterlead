@@ -24,7 +24,7 @@ export default function CommissionCard({
         ref={setNodeRef}
         {...attributes}
         {...listeners}
-        className="w-10 h-10 outline outline-4 outline-light-grey"
+        className="w-48 h-48 rounded-md outline outline-4 m-10 outline-light-grey"
         style={style}
       >
         <p className="text-xl text-lightest-grey">{name}</p>

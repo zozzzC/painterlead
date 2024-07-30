@@ -1,3 +1,4 @@
+/* eslint-disable react/react-in-jsx-scope */
 import Sidebar from "@/components/layout/sidebar";
 
 export default function EditCommissionLayout({
@@ -10,7 +11,7 @@ export default function EditCommissionLayout({
       <div className="h-full mr-10">
         <Sidebar />
       </div>
-      <section className="flex-grow">{children}</section>
+      <div className="flex-grow">{children}</div>
     </div>
   );
 }

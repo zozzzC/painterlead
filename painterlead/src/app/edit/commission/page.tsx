@@ -1,6 +1,7 @@
 "use client";
 
 import CommissionCard from "@/components/edit/CommissionCard";
+import Grid from "@/components/edit/Grid";
 import {
   closestCorners,
   DndContext,
@@ -9,6 +10,7 @@ import {
   useDraggable,
 } from "@dnd-kit/core";
 import { SortableContext, rectSortingStrategy } from "@dnd-kit/sortable";
+import { useState } from "react";
 
 const testCommissionData = [
   {
@@ -31,18 +33,25 @@ const onDragEnd = (event: DragEndEvent) => {
   // }
 };
 
-export default function commission() {
-  <div>
-    <p>test</p>
-    <DndContext collisionDetection={closestCorners} onDragEnd={onDragEnd}>
-      <SortableContext
-        items={testCommissionData}
-        strategy={rectSortingStrategy}
-      >
-        {testCommissionData.map((t) => (
-          <CommissionCard id={t.id} name={t.name} />
-        ))}
-      </SortableContext>
-    </DndContext>
-  </div>;
+export default function Commission() {
+  const [commissions, setCommissions] = useState<Array<any> | null>(
+    testCommissionData,
+  );
+
+  return (
+    <div>
+      <DndContext collisionDetection={closestCorners} onDragEnd={onDragEnd}>
+        <Grid cols={4}>
+          <SortableContext
+            items={testCommissionData}
+            strategy={rectSortingStrategy}
+          >
+            {testCommissionData.map((t) => (
+              <CommissionCard id={t.id} name={t.name} />
+            ))}
+          </SortableContext>
+        </Grid>
+      </DndContext>
+    </div>
+  );
 }
