@@ -9,13 +9,13 @@ const config: Config = {
   theme: {
     extend: {
       colors: {
-        'green' : '#6CA779',
-        'red' : '#E66F6F',
-        'orange' : '#E5AD59',
-        'dark-grey' : '#343434',
-        'light-grey' : '#414141',
-        'lightest-grey' : '#505050',
-        'text-white' : '#FFFFFF',
+        green: "#6CA779",
+        red: "#E66F6F",
+        orange: "#E5AD59",
+        "dark-grey": "#343434",
+        "light-grey": "#414141",
+        "lightest-grey": "#505050",
+        "text-white": "#FFFFFF",
       },
     },
   },
