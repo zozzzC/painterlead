@@ -8,10 +8,6 @@ router.post("/", validateReq(LoginUserSchema), async (req: express.Request, res:
     try { 
         const { email, password  } = req.body;
         const user = await loginUser({ email, password });
-
-        console.log(user)
-
-
         if (Object.keys(user).length === 0) { 
             res.status(201).json(req.body);
         } else { 
