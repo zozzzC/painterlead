@@ -18,23 +18,31 @@ import {
   rectSortingStrategy,
 } from "@dnd-kit/sortable";
 import { useState } from "react";
+import kaveh from "@/test/kaveh.jpg"
+import alhaitham from "@/test/alhaitham.jpg"
+import eula from "@/test/eula.png"
+import kokomi from "@/test/kokomi.png"
 
 const testCommissionData = [
   {
     id: 1,
     name: "1",
+    image: kaveh
   },
   {
     id: 2,
     name: "2",
+    image: alhaitham
   },
   {
     id: 3,
     name: "3",
+    image: kokomi
   },
   {
     id: 4,
     name: "4",
+    image: eula
   },
 ];
 
@@ -77,7 +85,7 @@ export default function SortableGrid() {
         >
           <Grid cols={4}>
             {commissions.map((t) => (
-              <CommissionCard key={t.id} id={t.id} name={t.name} /> //must be state since the order of the elements changes using setCommission
+              <CommissionCard key={t.id} id={t.id} name={t.name} image={t.image}/> //must be state since the order of the elements changes using setCommission
             ))}
           </Grid>
         </SortableContext>
