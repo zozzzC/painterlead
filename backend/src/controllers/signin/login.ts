@@ -1,6 +1,7 @@
 import bcrypt from "bcrypt";
 import { PrismaClient } from "@prisma/client";
 import { DefaultArgs } from "@prisma/client/runtime/library";
+import { Jwt } from "jsonwebtoken";
 const prisma = new PrismaClient();
 
 export default async function loginUser({email, password} : {email: string; password: string;}) { 
@@ -20,7 +21,7 @@ export default async function loginUser({email, password} : {email: string; pass
                 return errors.error;
             }
         }  else { 
-            //NOTE: this has to be an await since our function is already async. if we used the default
+            //NOTE: this has to be an await since if we used the default
             //bcrypt compare implementation, then it would not wait for it to execute and would 
             //execute other code before it since bcrypt.compare was async and did not return a promise
             const match = await bcrypt.compare(password, findEmail.password);
