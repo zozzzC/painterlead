@@ -4,7 +4,6 @@
 
 :root {
   --foreground-rgb: 0, 0, 0;
-  
 }
 
 @media (prefers-color-scheme: dark) {
@@ -15,14 +14,14 @@
   }
 }
 
-html { 
+html {
   height: 100vh;
 }
 
 body {
   background-color: rgb(52, 52, 52);
   height: 100%;
-  color: #FFFFFF;
+  color: #ffffff;
 }
 
 @layer utilities {
@@ -30,4 +29,3 @@ body {
     text-wrap: balance;
   }
 }
-
