@@ -38,7 +38,8 @@ model ArtistGeneralCommission {
   blurb String?
   description String? 
   artistImages ArtistImages[]
-  mainTag MainTag[] 
+  MainTag MainTag @relation(fields: [mainTagId], references:[id])
+  mainTagId Int
 }
 
 model MainTag { 
@@ -53,5 +54,12 @@ model ArtistImages {
   id Int @id @default(autoincrement())
   User   User @relation(fields: [artistId], references: [id])
   artistId Int
-  artistGeneralCommissions ArtistGeneralCommission[]
+  ArtistGeneralCommission ArtistGeneralCommission @relation(fields: [artistGeneralCommissionsId], references: [id])
+  artistGeneralCommissionsId Int
 }
+
+model OptionalTag { 
+  id Int @id @default(autoincrement())
+  name String
+
+} 
