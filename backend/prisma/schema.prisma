@@ -18,4 +18,40 @@ model User {
   email    String @unique
   username String @unique
   password String 
+  artistGeneralCommissions ArtistGeneralCommission[]
+  artistImages ArtistImages[] 
+  mainTag MainTag[]
+}
+
+enum Status { 
+  OPEN
+  WAITLIST
+  CLOSED
+}
+
+model ArtistGeneralCommission { 
+  id   Int @id @default(autoincrement())
+  User   User @relation(fields: [artistId], references: [id])
+  status Status 
+  artistId Int
+  name String
+  blurb String?
+  description String? 
+  artistImages ArtistImages[]
+  mainTag MainTag[] 
+}
+
+model MainTag { 
+  id Int @id @default(autoincrement())
+  name String
+  User  User @relation(fields: [artistId], references: [id])
+  artistId Int
+  ArtistGeneralCommission ArtistGeneralCommission[]
+}
+
+model ArtistImages { 
+  id Int @id @default(autoincrement())
+  User   User @relation(fields: [artistId], references: [id])
+  artistId Int
+  artistGeneralCommissions ArtistGeneralCommission[]
 }
