@@ -2,16 +2,23 @@ import { useSortable } from "@dnd-kit/sortable";
 import { CSS } from "@dnd-kit/utilities";
 import { StaticImageData } from "next/image";
 import Image from "next/image";
+import Carousel from "../general/Carousel";
+
+type images = {
+  id: number;
+  name: string;
+  src: StaticImageData;
+};
 
 export default function CommissionCard({
   id,
   name,
-  image,
+  images,
   tags,
 }: {
   id: number;
   name: string;
-  image: StaticImageData;
+  images: images[];
   tags?: string;
 }) {
   const { attributes, listeners, setNodeRef, transform, transition } =
@@ -35,13 +42,7 @@ export default function CommissionCard({
         className={`w-3/4 h-72 rounded-md outline outline-4 m-5`}
         style={style}
       >
-        <Image
-          className={"rounded-md"}
-          src={image.src}
-          alt="image"
-          fill={true}
-          style={{ objectFit: "cover" }}
-        />
+        <Carousel images={images} />
       </div>
     </>
   );
