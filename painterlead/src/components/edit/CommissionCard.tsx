@@ -8,13 +8,11 @@ export default function CommissionCard({
   name,
   image,
   tags,
-  addCard,
 }: {
   id: number;
   name: string;
   image: StaticImageData;
   tags?: string;
-  addCard?: boolean;
 }) {
   const { attributes, listeners, setNodeRef, transform, transition } =
     useSortable({
@@ -25,7 +23,7 @@ export default function CommissionCard({
     transition,
     transform: CSS.Transform.toString(transform),
     overflow: "hidden",
-    position: "relative", //this has to be relative because by default, the image is absolute, and will fill the entire section of the page that is  
+    position: "relative", //this has to be relative because by default, the image is absolute, and will fill the entire section of the page that is viewable since the page is relative
   };
 
   return (
@@ -34,7 +32,7 @@ export default function CommissionCard({
         ref={setNodeRef}
         {...attributes}
         {...listeners}
-        className={`w-3/4 h-72 rounded-md outline outline-4 m-5 ${addCard ? "outline-text-white" : "outline-light-grey"}`}
+        className={`w-3/4 h-72 rounded-md outline outline-4 m-5`}
         style={style}
       >
         <Image
