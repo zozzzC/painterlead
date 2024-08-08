@@ -23,6 +23,7 @@ import kaveh from "@/test/kaveh.jpg";
 import alhaitham from "@/test/alhaitham.jpg";
 import eula from "@/test/eula.png";
 import kokomi from "@/test/kokomi.png";
+import CommissionModal from "../general/CommissionModal";
 
 const testCommissionData = [
   {
@@ -50,6 +51,18 @@ const testCommissionData = [
 export default function SortableGrid() {
   //get the last index of testCommissionData
   const [commissions, setCommissions] = useState(testCommissionData);
+  const [showModal, setShowModal] = useState<boolean>(false);
+  const [selectedShowModalId, setSelectedShowModalId] = useState<Number>(0);
+
+  function handleShowModal({ id }: { id: Number }) {
+    setShowModal(() => !showModal);
+
+    if (showModal) {
+      console.log("showmodal " + showModal);
+      setSelectedShowModalId(id);
+    }
+  }
+
   const sensors = useSensors(
     useSensor(MouseSensor, {
       activationConstraint: {
@@ -72,15 +85,19 @@ export default function SortableGrid() {
     if (active.id === over.id) {
       return;
     }
-    setCommissions((commissions) => {
-      const oldIndex = commissions?.findIndex((c) => c.id === active.id);
-      const newIndex = commissions?.findIndex((c) => c.id === over.id);
-      return arrayMove(commissions, oldIndex, newIndex);
-    });
+
+    if (over) {
+      setCommissions((commissions) => {
+        const oldIndex = commissions?.findIndex((c) => c.id === active.id);
+        const newIndex = commissions?.findIndex((c) => c.id === over.id);
+        return arrayMove(commissions, oldIndex, newIndex);
+      });
+    }
   };
 
   return (
     <div>
+      {showModal ? <CommissionModal id={selectedShowModalId} /> : undefined}
       <DndContext
         id="sortable-grid"
         sensors={sensors}
@@ -98,6 +115,7 @@ export default function SortableGrid() {
                 id={t.id}
                 name={t.name}
                 images={testCommissionData}
+                handleShowModal={handleShowModal}
               /> //must be state since the order of the elements changes using setCommission
             ))}
           </Grid>

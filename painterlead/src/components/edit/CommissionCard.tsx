@@ -3,10 +3,13 @@ import { CSS } from "@dnd-kit/utilities";
 import { StaticImageData } from "next/image";
 import Image from "next/image";
 import Carousel from "../general/Carousel";
+import { useState } from "react";
 
 type images = {
   id: number;
   name: string;
+  blurb?: string;
+  desc?: string;
   src: StaticImageData;
 };
 
@@ -15,11 +18,13 @@ export default function CommissionCard({
   name,
   images,
   tags,
+  handleShowModal,
 }: {
   id: number;
   name: string;
   images: images[];
   tags?: string;
+  handleShowModal: ({ id }: { id: Number }) => any;
 }) {
   const { attributes, listeners, setNodeRef, transform, transition } =
     useSortable({
@@ -34,16 +39,22 @@ export default function CommissionCard({
   };
 
   return (
-    <>
+    <div>
       <div
         ref={setNodeRef}
         {...attributes}
         {...listeners}
-        className={`w-3/4 h-72 rounded-md outline outline-4 m-5`}
         style={style}
+        onClick={() => handleShowModal({ id })}
       >
-        <Carousel images={images} />
+        <div className="w-3/4 h-72 rounded-md outline outline-4 relative overflow-hidden m-5">
+          <Carousel images={images} />
+        </div>
+        <div className="m-5">
+          <p className="font-bold text-xl">{name}</p>
+          <p className="text-s text-justify">Lorem ipsum</p>
+        </div>
       </div>
-    </>
+    </div>
   );
 }
