@@ -12,8 +12,9 @@ This is a personal project created with a Next.js frontend and an Express backen
 ---
 ## Currently Working On 
 - Figma Design
-- Login Backend Logic
-- Login Frontend Logic
+- Login Backend Logic (70% done)
+- Login Frontend Logic (0%)
+- Commission Page Frontend (40% done)
 
 ---
 # Stack: 
