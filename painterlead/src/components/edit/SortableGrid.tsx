@@ -95,7 +95,10 @@ export default function SortableGrid() {
   };
 
   return (
-    <div>
+    <div className="h-full">
+      <div className="z-10">
+        {showModal ? <CommissionModal id={selectedShowModalId} /> : undefined}
+      </div>
       <div className="z-0">
         <DndContext
           id="sortable-grid"
