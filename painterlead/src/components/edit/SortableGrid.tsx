@@ -81,12 +81,11 @@ export default function SortableGrid() {
   );
   const dragEnd = (event: DragEndEvent) => {
     const { active, over } = event;
-    // @ts-ignore
-    if (active.id === over.id) {
-      return;
-    }
-
     if (over) {
+      if (active.id === over.id) {
+        return;
+      }
+
       setCommissions((commissions) => {
         const oldIndex = commissions?.findIndex((c) => c.id === active.id);
         const newIndex = commissions?.findIndex((c) => c.id === over.id);
@@ -97,30 +96,31 @@ export default function SortableGrid() {
 
   return (
     <div>
-      {showModal ? <CommissionModal id={selectedShowModalId} /> : undefined}
-      <DndContext
-        id="sortable-grid"
-        sensors={sensors}
-        collisionDetection={closestCorners}
-        onDragEnd={dragEnd}
-      >
-        <SortableContext
-          items={commissions} //a sorted array of the unique identifiers associated with the elements that use the useSortable hook within it.
-          strategy={rectSortingStrategy}
+      <div className="z-0">
+        <DndContext
+          id="sortable-grid"
+          sensors={sensors}
+          collisionDetection={closestCorners}
+          onDragEnd={dragEnd}
         >
-          <Grid cols={4}>
-            {commissions.map((t) => (
-              <CommissionCard
-                key={t.id}
-                id={t.id}
-                name={t.name}
-                images={testCommissionData}
-                handleShowModal={handleShowModal}
-              /> //must be state since the order of the elements changes using setCommission
-            ))}
-          </Grid>
-        </SortableContext>
-      </DndContext>
+          <SortableContext
+            items={commissions} //a sorted array of the unique identifiers associated with the elements that use the useSortable hook within it.
+            strategy={rectSortingStrategy}
+          >
+            <Grid cols={4}>
+              {commissions.map((t) => (
+                <CommissionCard
+                  key={t.id}
+                  id={t.id}
+                  name={t.name}
+                  images={testCommissionData}
+                  handleShowModal={handleShowModal}
+                /> //must be state since the order of the elements changes using setCommission
+              ))}
+            </Grid>
+          </SortableContext>
+        </DndContext>
+      </div>
     </div>
   );
 }

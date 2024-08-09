@@ -8,7 +8,15 @@ type images = {
   src: StaticImageData;
 };
 
-export default function Carousel({ images }: { images: images[] }) {
+export default function Carousel({
+  id,
+  images,
+  handleShowModal,
+}: {
+  id: Number;
+  images: images[];
+  handleShowModal: ({ id }: { id: Number }) => any;
+}) {
   const [index, setIndex] = useState<number>(0);
 
   function nextImage() {
@@ -37,6 +45,7 @@ export default function Carousel({ images }: { images: images[] }) {
         src={images[index].src}
         alt="image"
         fill={true}
+        onClick={() => handleShowModal({ id })}
         style={{ objectFit: "cover" }}
       />
       <button onClick={previousImage} className="absolute top-1/2 ml-2">
