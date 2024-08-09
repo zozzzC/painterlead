@@ -39,16 +39,10 @@ export default function CommissionCard({
   };
 
   return (
-    <div>
-      <div
-        ref={setNodeRef}
-        {...attributes}
-        {...listeners}
-        style={style}
-        onClick={() => handleShowModal({ id })}
-      >
-        <div className="w-3/4 h-72 rounded-md outline outline-4 relative overflow-hidden m-5">
-          <Carousel images={images} />
+    <div className="mx-5">
+      <div ref={setNodeRef} {...attributes} {...listeners} style={style}>
+        <div className="h-72 rounded-md outline outline-4 relative overflow-hidden m-5">
+          <Carousel id={id} images={images} handleShowModal={handleShowModal} />
         </div>
         <div className="m-5">
           <p className="font-bold text-xl">{name}</p>
