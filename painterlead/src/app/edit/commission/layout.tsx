@@ -9,7 +9,7 @@ export default function EditCommissionLayout({
 }>) {
   return (
     <div className="h-full flex flex-row">
-      <div className="h-full mr-10">
+      <div className="h-full">
         <Sidebar />
       </div>
       <RoundButton />
