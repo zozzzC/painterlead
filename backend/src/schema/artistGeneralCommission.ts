@@ -7,10 +7,12 @@ export const ArtistGeneralCommissionSchema = z.object({
         required_error: "Commission name is required",
     }),
     artistId: z.number({
-        required_error: "ArtistID must be specified",
+        required_error: "ArtistId is required",
     }),
     blurb: z.string().max(100).optional(),
     description: z.string().max(500),
-    
+    mainTagId: z.number({
+        required_error: "MainTagId is required"
+    })
     // status: z.enum(Status)
 })

@@ -1,9 +1,5 @@
 import bcrypt from 'bcrypt';
 import { PrismaClient } from '@prisma/client';
-import { DefaultArgs } from '@prisma/client/runtime/library';
-import { Jwt } from 'jsonwebtoken';
-import { string } from 'zod';
-import { signJWT } from '../../helpers/jwt';
 const prisma = new PrismaClient();
 
 export default async function loginUser({
