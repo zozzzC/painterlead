@@ -11,6 +11,7 @@ router.get(
     async (req: express.Request, res: express.Response) => {
         try {
             const artistId = req?.params['artistId'];
+
             if (artistId) {
                 const findArtistCommissions =
                     await prisma.artistGeneralCommission.findMany({
@@ -23,6 +24,7 @@ router.get(
             }
         } catch (err) {
             return res.sendStatus(500);
+
         }
     },
 );
@@ -61,7 +63,8 @@ router.post(
                     });
 
                 if (nameExists) {
-                    return res.sendStatus(400);
+
+                    res.sendStatus(400);
                 }
 
                 const newCommission =
@@ -73,6 +76,7 @@ router.post(
                     });
 
                 return res.sendStatus(201);
+
             }
 
             res.sendStatus(400);
@@ -113,7 +117,5 @@ router.post(
         }
     },
 );
-
-
 
 export default router;
