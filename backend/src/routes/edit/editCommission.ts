@@ -23,8 +23,8 @@ router.get(
                 return res.status(200).json(findArtistCommissions);
             }
         } catch (err) {
-            return err;
-            return res.sendStatus(400);
+            return res.sendStatus(500);
+
         }
     },
 );
@@ -63,6 +63,7 @@ router.post(
                     });
 
                 if (nameExists) {
+
                     res.sendStatus(400);
                 }
 
@@ -70,10 +71,12 @@ router.post(
                     await prisma.artistGeneralCommission.create({
                         data: {
                             ...req.body,
+                            artistId: userId.id,
                         },
                     });
 
-                res.sendStatus(201);
+                return res.sendStatus(201);
+
             }
 
             res.sendStatus(400);

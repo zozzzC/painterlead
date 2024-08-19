@@ -3,6 +3,8 @@ import express, { NextFunction } from 'express';
 import dotenv from 'dotenv';
 const router = express.Router();
 
+//JWT middlewares
+
 export function signJWT({ username }: { username: string }) {
     //@ts-ignore
     const jwtHash: jwt.Secret = process.env.JWT;
