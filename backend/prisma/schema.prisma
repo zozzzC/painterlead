@@ -37,7 +37,7 @@ model ArtistGeneralCommission {
   name String
   blurb String?
   description String? 
-  artistImages ArtistImages[]
+  ArtistImages ArtistImages[] 
   MainTag MainTag @relation(fields: [mainTagId], references:[id])
   OptionalTag OptionalTag? @relation(fields: [optionalTagId], references: [id])
   mainTagId Int
@@ -56,8 +56,7 @@ model ArtistImages {
   id Int @id @default(autoincrement())
   User   User @relation(fields: [artistId], references: [id])
   artistId Int
-  ArtistGeneralCommission ArtistGeneralCommission @relation(fields: [artistGeneralCommissionsId], references: [id])
-  artistGeneralCommissionsId Int
+  ArtistGeneralCommission ArtistGeneralCommission[]
 }
 
 model OptionalTag { 
