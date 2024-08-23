@@ -12,7 +12,17 @@ import { idOnly } from '../../schema/general';
 import resResult from '../../helpers/resResult';
 const router = express.Router();
 
-//can get all main tags or just one specific one with req params
+//TODO: can get all main tags
+router.get(
+    '/',
+    validateReq(MainTagSchema),
+    verifyJWT(),
+    async (req: express.Request, res: express.Response) => {
+        return res.sendStatus(200);
+    },
+);
+
+//TODO: can get main tag by commission ID 
 router.get(
     '/',
     validateReq(MainTagSchema),

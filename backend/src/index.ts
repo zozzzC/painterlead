@@ -3,6 +3,8 @@ import cors from 'cors';
 import jwt from 'jsonwebtoken';
 import dotenv from 'dotenv';
 import path from 'path';
+import { S3Client, ListBucketsCommand } from '@aws-sdk/client-s3';
+export const s3Client = new S3Client({ region: 'ap-southeast-2' });
 
 const app = express();
 
