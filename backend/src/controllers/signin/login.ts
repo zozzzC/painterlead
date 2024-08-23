@@ -1,5 +1,6 @@
 import bcrypt from 'bcrypt';
 import { PrismaClient } from '@prisma/client';
+import responseError from '../../helpers/error';
 const prisma = new PrismaClient();
 
 export default async function loginUser({
@@ -10,8 +11,9 @@ export default async function loginUser({
     password: string;
 }) {
     try {
-        const errors: { [key: string]: any } = {};
-        errors['error'] = {};
+        // const errors: { [key: string]: any } = {};
+        // errors['error'] = {};
+        const errors = new responseError();
 
         const findEmail = await prisma.user.findUnique({
             where: {
@@ -20,11 +22,18 @@ export default async function loginUser({
         });
 
         if (findEmail === null) {
-            errors.error.email = [];
-            errors.error.email[0] = 'Email has not been registered.';
-            if (JSON.stringify(errors.error) !== null) {
+            errors.createNewError({
+                errorType: 'email',
+                errorMessage: 'Email has not been registered.',
+            });
+            // errors.error.email = [];
+            // errors.error.email[0] = 'Email has not been registered.';
+            if (errors.isNull() == false) {
                 return errors;
             }
+            // if (JSON.stringify(errors.error) !== null) {
+            //     return errors;
+            // }
         }
 
         //NOTE: this has to be an await since if we used the default
@@ -33,8 +42,13 @@ export default async function loginUser({
         //@ts-ignore
         const match = await bcrypt.compare(password, findEmail.password);
         if (!match) {
-            errors.error.password = [];
-            errors.error.password[0] = 'Passwords do not match.';
+            errors.createNewError({
+                errorType: 'password',
+                errorMessage: 'Passwords do not match.',
+            });
+            console.log(errors);
+            // errors.error.password = [];
+            // errors.error.password[0] = 'Passwords do not match.';
             return errors;
         }
         return {};

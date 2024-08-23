@@ -16,19 +16,20 @@ router.post(
             const user = await loginUser({ email, password });
             if (Object.keys(user).length == 0) {
                 const findEmail = await prisma.user.findUnique({
-                    where: { 
-                        email: email
-                    }
-                })
+                    where: {
+                        email: email,
+                    },
+                });
                 //@ts-ignore
                 const username = findEmail.username;
                 const token = signJWT({ username });
-                res.setHeader("authorization", token);
+                res.setHeader('authorization', token);
                 res.status(201).json(token);
             } else {
                 res.status(400).json(user);
             }
         } catch (err) {
+            console.log(err);
             res.status(500).send(err);
         }
     },
