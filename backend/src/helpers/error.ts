@@ -18,7 +18,6 @@ export default class responseError {
         errorMessage: string;
     }) {
         if (this.errors.error[errorType]) {
-            const nextIndex = this.errors.error.errorType.length;
             this.errors.error[errorType] = [
                 ...this.errors.error[errorType],
                 errorMessage,

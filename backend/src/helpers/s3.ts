@@ -24,7 +24,7 @@ const s3Client = new S3Client({
     region: region,
 });
 
-async function createDbKey({ userId }: { userId: number }) {
+async function createDbKey({ userId }: { userId: string }) {
     const image = await prisma.artistImages.create({
         data: {
             artistId: userId,
@@ -33,14 +33,20 @@ async function createDbKey({ userId }: { userId: number }) {
     return image.id;
 }
 
-export async function signedUrlPut({userId, fileType} : {userId: number, fileType: string}) { 
+export async function signedUrlPut({
+    userId,
+    fileType,
+}: {
+    userId: string;
+    fileType: string;
+}) {
     try {
         const key = await createDbKey({ userId });
         const params = {
             Bucket: bucketName,
             Key: key.toString(),
             Region: region,
-            ContentType: `image/${fileType}`
+            ContentType: `image/${fileType}`,
         };
 
         const command = new PutObjectCommand(params);
@@ -51,7 +57,7 @@ export async function signedUrlPut({userId, fileType} : {userId: number, fileTyp
     }
 }
 
-async function signedUrlGet({ userId }: { userId: number }) {
+async function signedUrlGet({ userId }: { userId: string }) {
     try {
         const key = await createDbKey({ userId });
         const params = {

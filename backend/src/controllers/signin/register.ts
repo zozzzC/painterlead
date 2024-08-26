@@ -1,5 +1,6 @@
 import bcrypt from 'bcrypt';
 import { PrismaClient } from '@prisma/client';
+import responseError from '../../helpers/error';
 const prisma = new PrismaClient();
 
 export default async function registerUser({
@@ -12,8 +13,7 @@ export default async function registerUser({
     password: string;
 }) {
     try {
-        const errors: { [key: string]: any } = {};
-        errors['error'] = {};
+        const errors = new responseError();
 
         const findEmail = await prisma.user.findUnique({
             where: {
@@ -22,8 +22,7 @@ export default async function registerUser({
         });
 
         if (findEmail) {
-            errors.error.email = [];
-            errors.error.email[0] = 'That email has already been registered.';
+            errors.createNewError({errorType: 'email', errorMessage: 'That email has already been registered.'})
         }
 
         const findUsername = await prisma.user.findUnique({
@@ -33,12 +32,10 @@ export default async function registerUser({
         });
 
         if (findUsername) {
-            errors.error.username = [];
-            errors.error.username[0] =
-                'That username has already been registered.';
+            errors.createNewError({errorType: 'username', errorMessage: 'That username has already been registered.'})
         }
 
-        if (JSON.stringify(errors.error) !== '{}') {
+        if (!errors.isNull()) {
             return errors;
         }
 

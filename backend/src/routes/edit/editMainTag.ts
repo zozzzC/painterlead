@@ -18,16 +18,20 @@ router.get(
     validateReq(MainTagSchema),
     verifyJWT(),
     async (req: express.Request, res: express.Response) => {
+
         return res.sendStatus(200);
     },
 );
 
 //TODO: can get main tag by commission ID 
 router.get(
-    '/',
+    '/:id',
     validateReq(MainTagSchema),
     verifyJWT(),
     async (req: express.Request, res: express.Response) => {
+        
+
+
         return res.sendStatus(200);
     },
 );

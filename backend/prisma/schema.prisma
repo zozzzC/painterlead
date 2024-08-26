@@ -14,7 +14,7 @@ datasource db {
 }
 
 model User {
-  id       Int    @id @default(autoincrement())
+  id String @id @default(uuid())
   email    String @unique
   username String @unique
   password String 
@@ -30,37 +30,47 @@ enum Status {
 }
 
 model ArtistGeneralCommission { 
-  id   Int @id @default(autoincrement())
+  id String @id @default(uuid())
   User   User @relation(fields: [artistId], references: [id])
   status Status 
-  artistId Int
+  artistId String
   name String
   blurb String?
   description String? 
-  ArtistImages ArtistImages[] 
   MainTag MainTag @relation(fields: [mainTagId], references:[id])
   OptionalTag OptionalTag? @relation(fields: [optionalTagId], references: [id])
-  mainTagId Int
-  optionalTagId Int?
+  CommissionToArtistImages CommissionToArtistImages[]
+  mainTagId String
+  optionalTagId String? 
 }
 
 model MainTag { 
-  id Int @id @default(autoincrement())
+  id String @id @default(uuid())
   name String
   User  User @relation(fields: [artistId], references: [id])
-  artistId Int
+  artistId String
   ArtistGeneralCommission ArtistGeneralCommission[]
 }
 
+model CommissionToArtistImages {
+  id String @id @default(uuid())
+  ArtistImages ArtistImages @relation(fields: [artistImagesId], references: [id])
+  artistImagesId String
+  ArtistGeneralCommission ArtistGeneralCommission @relation(fields: [artistGeneralCommissionId], references: [id])
+  artistGeneralCommissionId String
+  sort Int 
+}
+
+
 model ArtistImages { 
-  id Int @id @default(autoincrement())
+  id String @id @default(uuid())
   User   User @relation(fields: [artistId], references: [id])
-  artistId Int
-  ArtistGeneralCommission ArtistGeneralCommission[]
+  artistId String 
+  CommissionToArtistImages CommissionToArtistImages[]
 }
 
 model OptionalTag { 
-  id Int @id @default(autoincrement())
+  id String @id @default(uuid())
   name String
   ArtistGeneralCommission ArtistGeneralCommission[]
 } 

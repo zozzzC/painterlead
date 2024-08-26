@@ -10,8 +10,6 @@ router.post(
     verifyJWT(),
     async (req: express.Request, res: express.Response) => {
         const errors = new responseError();
-        // const errors: { [key: string]: any } = {};
-        // errors['error'] = {};
         try {
             // @ts-ignore
             const token = req?.token;

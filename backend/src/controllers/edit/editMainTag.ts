@@ -1,6 +1,6 @@
 import { PrismaClient, User } from '@prisma/client';
-import error from '../../helpers/error';
 import { getUserId } from '../../helpers/getUserId';
+import responseError from '../../helpers/error';
 const prisma = new PrismaClient();
 
 type Token = {
@@ -12,7 +12,7 @@ type Body = {
 };
 
 type BodyWithId = {
-    id: number;
+    id: string;
     name: string;
 };
 
@@ -23,8 +23,7 @@ export async function createMainTag({
     body: Body;
     token: Token;
 }): Promise<Object | undefined> {
-    const errors: { [key: string]: any } = {};
-    errors['error'] = {};
+    const errors = new responseError();
     try {
         const user = await prisma.user.findUnique({
             where: {
@@ -45,23 +44,29 @@ export async function createMainTag({
         console.log(userMainTagExists);
 
         if (userMainTagExists) {
-            (errors.error.tag = []),
-                (errors.error.tag[0] = 'This tag already exists');
+            errors.createNewError({
+                errorType: 'tag',
+                errorMessage: 'This tag already exists',
+            });
             return errors;
         }
 
-        await prisma.mainTag.create({
-            data: {
-                name: body.name,
-                //@ts-ignore
-                artistId: parseInt(userId),
-            },
-        });
+        if (userId) {
+            await prisma.mainTag.create({
+                data: {
+                    name: body.name,
+                    artistId: userId,
+                },
+            });
+        }
 
         return {};
     } catch (err) {
         console.log(err);
-        (errors.error.tag = []), (errors.error.tag[0] = 'Server error.');
+        errors.createNewError({
+            errorType: 'tag',
+            errorMessage: 'Server error',
+        });
         return errors;
     }
 }
@@ -74,8 +79,7 @@ export async function updateMainTag({
     bodyWithId: BodyWithId;
     token: Token;
 }): Promise<Object | undefined> {
-    const errors: { [key: string]: any } = {};
-    errors['error'] = {};
+    const errors = new responseError();
     const mainTagId = bodyWithId.id;
 
     const user = await prisma.user.findUnique({
@@ -84,6 +88,13 @@ export async function updateMainTag({
         },
     });
 
+    if (!user) {
+        errors.createNewError({
+            errorType: 'tag',
+            errorMessage: 'User not found.',
+        });
+        return errors;
+    }
     const userId = user?.id;
 
     try {
@@ -99,8 +110,10 @@ export async function updateMainTag({
             });
         }
     } catch (err) {
-        errors.error.tag = [];
-        errors.error.tag[0] = 'You are not authorized to change this resource.';
+        errors.createNewError({
+            errorType: 'tag',
+            errorMessage: 'You are not authorised to change this resource',
+        });
         return errors;
     }
     return {};
@@ -115,8 +128,7 @@ export async function deleteMainTag({
     bodyWithId: BodyWithId;
     token: Token;
 }) {
-    const errors: { [key: string]: any } = {};
-    errors['error'] = {};
+    const errors = new responseError();
     try {
         const userId = await getUserId({ token });
         if (userId) {
@@ -128,13 +140,16 @@ export async function deleteMainTag({
 
             return {};
         }
-
-        errors.error.tag = [];
-        errors.error.tag[0] = 'You are not authorized to change this resource.';
+        errors.createNewError({
+            errorType: 'tag',
+            errorMessage: 'You are not authorized to change this resource',
+        });
         return errors;
     } catch (err) {
-        errors.error.tag = [];
-        errors.error.tag[0] = 'Could not find the given tag.';
+        errors.createNewError({
+            errorType: 'tag',
+            errorMessage: 'Could not make tag',
+        });
         return errors;
     }
 }
