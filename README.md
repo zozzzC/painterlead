@@ -20,16 +20,15 @@ This is a personal project created with a Next.js frontend and an Express backen
 # Stack: 
 ## Frontend
 - Typescript
-- Next.js (Sans API)
+- Next.js (Router)
 - React
 - Tailwind CSS
-- Storybook
 - Tanstack (React) Query
 
 ## Backend 
 - Typescript
 - Express + Node.js
-- bcrypt (password hashing)
+- Auth0
 - Prisma (ORM)
 - Postgres
 
