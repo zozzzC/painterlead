@@ -1,38 +1,59 @@
 import express from 'express';
-import { MainTagSchema, MainTagSchemaId } from '../../schema/mainTag';
+import {
+    MainTagSchema,
+    MainTagSchemaCommissionId,
+    MainTagSchemaId,
+} from '../../schema/mainTag';
 import validateReq from '../../helpers/zodValidationGeneric';
 import { verifyJWT } from '../../helpers/jwt';
 import {
     createMainTag,
     deleteMainTag,
-    replaceMainTag,
+    getMainTag,
+    getMainTagByCommissionId,
     updateMainTag,
 } from '../../controllers/edit/editMainTag';
 import { idOnly } from '../../schema/general';
 import resResult from '../../helpers/resResult';
+import { checkJwt } from '../../helpers/auth0Jwt';
+import { getIdFromEmail } from '../../helpers/getIdFromEmail';
 const router = express.Router();
 
-//TODO: can get all main tags
+//TODO: can get all main tags that a user has (when logged in)
 router.get(
     '/',
     validateReq(MainTagSchema),
-    verifyJWT(),
+    checkJwt,
     async (req: express.Request, res: express.Response) => {
+        // @ts-ignore
+        const token = req.auth[`email`];
+        const id = await getIdFromEmail(token);
 
-        return res.sendStatus(200);
+        if (id) {
+            const result = await getMainTag({ id });
+            if (resResult({ result })) {
+                return res.sendStatus(201);
+            } else {
+                return res.status(400).json(result);
+            }
+        }
+
+        return res.sendStatus(500);
     },
 );
 
-//TODO: can get main tag by commission ID 
+//TODO: can get main tag by commission ID
 router.get(
     '/:id',
-    validateReq(MainTagSchema),
-    verifyJWT(),
+    validateReq(MainTagSchemaCommissionId),
     async (req: express.Request, res: express.Response) => {
-        
-
-
-        return res.sendStatus(200);
+        const commissionId = req.params.id;
+        const result = await getMainTagByCommissionId({ commissionId });
+        if (resResult({ result })) {
+            return res.status(201).json(result);
+        } else {
+            return res.status(400).json(result);
+        }
     },
 );
 
@@ -40,10 +61,10 @@ router.get(
 router.post(
     '/',
     validateReq(MainTagSchema),
-    verifyJWT(),
+    checkJwt,
     async (req: express.Request, res: express.Response) => {
         // @ts-ignore
-        const token = req?.token;
+        const token = req.auth[`email`];
         const body = req.body;
 
         const result = await createMainTag({ body, token });
@@ -52,28 +73,28 @@ router.post(
         } else {
             return res.status(400).json(result);
         }
-
-        return res.sendStatus(500);
     },
 );
-
 
 //can update (PATCH) main tag
 router.patch(
     '/',
     validateReq(MainTagSchemaId),
-    verifyJWT(),
+    checkJwt,
     async (req: express.Request, res: express.Response) => {
         // @ts-ignore
-        const token = req?.token;
+        const token = req.auth[`email`];
+        const id = await getIdFromEmail(token);
         const bodyWithId = req.body;
-
-        const result = await updateMainTag({ bodyWithId, token });
-        if (resResult({ result })) {
-            return res.sendStatus(201);
-        } else {
-            return res.status(400).json(result);
+        if (id) {
+            const result = await updateMainTag({ bodyWithId, id });
+            if (resResult({ result })) {
+                return res.sendStatus(201);
+            } else {
+                return res.status(400).json(result);
+            }
         }
+        return res.sendStatus(500);
     },
 );
 

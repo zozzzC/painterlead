@@ -11,3 +11,9 @@ export const MainTagSchemaId = MainTagSchema.extend({
         required_error: 'Main Tag Id is required',
     }),
 });
+
+export const MainTagSchemaCommissionId = z.object({
+    id: z.string({
+        required_error: 'Main Tag Id is required.',
+    }),
+});

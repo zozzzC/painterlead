@@ -4,6 +4,8 @@ import "./globals.css";
 import Sidebar from "../components/layout/sidebar";
 import { Outfit } from "next/font/google";
 import Footer from "@/components/layout/footer";
+import React from "react";
+import AuthProvider from "@/components/AuthProvider";
 
 const outfit = Outfit({
   weight: "400",
@@ -23,9 +25,11 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en">
-      <body className={outfit.className}>
-        <div className="h-full">{children}</div>
-      </body>
+      <AuthProvider>
+        <body className={outfit.className}>
+          <div className="h-full">{children}</div>
+        </body>
+      </AuthProvider>
     </html>
   );
 }

@@ -3,6 +3,7 @@ import { ArtistGeneralCommissionSchema } from '../../schema/artistGeneralCommiss
 import validateReq from '../../helpers/zodValidationGeneric';
 import { verifyJWT } from '../../helpers/jwt';
 import { PrismaClient } from '@prisma/client';
+import { checkJwt } from '../../helpers/auth0Jwt';
 const prisma = new PrismaClient();
 const router = express.Router();
 
@@ -16,7 +17,7 @@ router.get(
                 const findArtistCommissions =
                     await prisma.artistGeneralCommission.findMany({
                         where: {
-                            artistId: parseInt(artistId),
+                            artistId: artistId,
                         },
                     });
 
@@ -24,7 +25,6 @@ router.get(
             }
         } catch (err) {
             return res.sendStatus(500);
-
         }
     },
 );
@@ -38,17 +38,17 @@ router.get('/', async (req: express.Request, res: express.Response) => {
 router.post(
     '/',
     validateReq(ArtistGeneralCommissionSchema),
-    verifyJWT(),
+    checkJwt,
     async (req: express.Request, res: express.Response) => {
         try {
             // @ts-ignore
-            const token = req?.token;
+            const token = req.auth[`email`];
             const commissionId = req?.params['commissionId'];
             const { name }: { name: string } = req.body;
 
             const userId = await prisma.user.findUnique({
                 where: {
-                    username: token.username,
+                    email: token,
                 },
             });
 
@@ -63,7 +63,6 @@ router.post(
                     });
 
                 if (nameExists) {
-
                     res.sendStatus(400);
                 }
 
@@ -76,7 +75,6 @@ router.post(
                     });
 
                 return res.sendStatus(201);
-
             }
 
             res.sendStatus(400);
@@ -102,7 +100,7 @@ router.post(
                     where: {
                         // @ts-ignore
                         artistId: parseInt(req.token.username),
-                        id: parseInt(commissionId),
+                        id: commissionId,
                     },
                 });
             // if (matchJWTWithCommission) {

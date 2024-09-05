@@ -3,10 +3,6 @@ import { getUserId } from '../../helpers/getUserId';
 import responseError from '../../helpers/error';
 const prisma = new PrismaClient();
 
-type Token = {
-    username: string;
-};
-
 type Body = {
     name: string;
 };
@@ -16,18 +12,71 @@ type BodyWithId = {
     name: string;
 };
 
+type BodyWithUserId = {
+    id: string;
+};
+
+export async function getMainTag({ id }: { id: string }) {
+    const errors = new responseError();
+    try {
+        const userID = id;
+
+        const usersMainTags = await prisma.mainTag.findMany({
+            where: {
+                artistId: userID,
+            },
+        });
+
+        return usersMainTags;
+    } catch (err) {
+        errors.createNewError({
+            errorType: 'tag',
+            errorMessage: 'Tags were not found for the given user.',
+        });
+        return errors.allErrors;
+    }
+}
+
+export async function getMainTagByCommissionId({
+    commissionId,
+}: {
+    commissionId: string;
+}) {
+    const errors = new responseError();
+    try {
+        const commissionMainTags =
+            await prisma.artistGeneralCommission.findFirst({
+                where: {
+                    id: commissionId,
+                },
+            });
+        const mainTag = await prisma.mainTag.findFirst({
+            where: {
+                id: commissionMainTags?.mainTagId,
+            },
+        });
+        return mainTag;
+    } catch (err) {
+        errors.createNewError({
+            errorType: 'tag',
+            errorMessage: 'Tag was not found for the given commission ID.',
+        });
+        return errors.allErrors;
+    }
+}
+
 export async function createMainTag({
     body,
     token,
 }: {
     body: Body;
-    token: Token;
+    token: string;
 }): Promise<Object | undefined> {
     const errors = new responseError();
     try {
         const user = await prisma.user.findUnique({
             where: {
-                username: token.username,
+                email: token,
             },
         });
 
@@ -74,17 +123,17 @@ export async function createMainTag({
 //patch
 export async function updateMainTag({
     bodyWithId,
-    token,
+    id,
 }: {
     bodyWithId: BodyWithId;
-    token: Token;
+    id: string;
 }): Promise<Object | undefined> {
     const errors = new responseError();
     const mainTagId = bodyWithId.id;
 
     const user = await prisma.user.findUnique({
         where: {
-            username: token.username,
+            id: id,
         },
     });
 
@@ -95,7 +144,8 @@ export async function updateMainTag({
         });
         return errors;
     }
-    const userId = user?.id;
+
+    const userId = user.id;
 
     try {
         if (userId) {
@@ -119,14 +169,12 @@ export async function updateMainTag({
     return {};
 }
 
-export async function replaceMainTag() {}
-
 export async function deleteMainTag({
     bodyWithId,
     token,
 }: {
     bodyWithId: BodyWithId;
-    token: Token;
+    token: string;
 }) {
     const errors = new responseError();
     try {
