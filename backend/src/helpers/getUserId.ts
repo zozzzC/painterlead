@@ -5,7 +5,7 @@ export async function getUserId({ token }: { token: any }) {
 
     const findUserId = await prisma.user.findUnique({
         where: {
-            username: token.username,
+            email: token,
         },
     });
 
