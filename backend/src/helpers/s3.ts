@@ -1,5 +1,3 @@
-import aws from 'aws-sdk';
-import dotenv from 'dotenv';
 import { getSignedUrl } from '@aws-sdk/s3-request-presigner';
 import {
     S3Client,
@@ -8,8 +6,11 @@ import {
     DeleteObjectCommand,
 } from '@aws-sdk/client-s3';
 import { PrismaClient, Prisma } from '@prisma/client';
-const prisma = new PrismaClient();
+import crypto from 'crypto';
+import responseError from './error';
+import { FileTypeError } from './error/errorTypes';
 
+const prisma = new PrismaClient();
 const region = 'ap-southeast-2';
 const accessKey = process.env.AWS_ACCESS_KEY_ID;
 const secretAccessKey = process.env.AWS_SECRET_ACCESS_KEY;
@@ -24,13 +25,19 @@ const s3Client = new S3Client({
     region: region,
 });
 
-async function createDbKey({ userId }: { userId: string }) {
+async function associateUserImage({
+    userId,
+    url,
+}: {
+    userId: string;
+    url: string | URL;
+}) {
     const image = await prisma.artistImages.create({
         data: {
             artistId: userId,
+            s3Url: JSON.stringify(url),
         },
     });
-    return image.id;
 }
 
 export async function signedUrlPut({
@@ -40,36 +47,54 @@ export async function signedUrlPut({
     userId: string;
     fileType: string;
 }) {
+    const errors = new responseError();
     try {
-        const key = await createDbKey({ userId });
-        const params = {
-            Bucket: bucketName,
-            Key: key.toString(),
-            Region: region,
-            ContentType: `image/${fileType}`,
-        };
+        const key = crypto.randomBytes(16).toString('hex');
 
-        const command = new PutObjectCommand(params);
-        const url = await getSignedUrl(s3Client, command, { expiresIn: 5000 });
-        return url;
-    } catch (err) {
-        return err;
+        if (fileType === 'png' || fileType == 'jpeg') {
+            const params = {
+                Bucket: bucketName,
+                Key: `uploads/${userId}/${key.toString()}`,
+                Region: region,
+                ContentType: `image/${fileType}`,
+            };
+
+            const command = new PutObjectCommand(params);
+            const url = await getSignedUrl(s3Client, command, {
+                expiresIn: 5000,
+            });
+            await associateUserImage({ userId, url });
+            const keyAndUrl = [key, url];
+            return keyAndUrl;
+        }
+        throw new FileTypeError(['PNG', 'JPEG']);
+        // errors.createNewError({
+        //     errorType: 'file',
+        //     errorMessage: 'File must be of PNG or JPEG type only.',
+        // });
+
+        // return errors.allErrors;
+    } catch (err: any) {
+        // errors.createNewError({ errorType: 'file', errorMessage: err });
+        // return errors.allErrors;
     }
 }
 
 async function signedUrlGet({ userId }: { userId: string }) {
+    const errors = new responseError();
     try {
-        const key = await createDbKey({ userId });
+        const key = crypto.randomBytes(16).toString();
         const params = {
             Bucket: bucketName,
-            Key: key.toString(),
+            Key: userId,
             Region: region,
         };
 
         const command = new GetObjectCommand(params);
         const url = await getSignedUrl(s3Client, command, { expiresIn: 5000 });
         return url;
-    } catch (err) {
-        return err;
+    } catch (err: any) {
+        errors.createNewError({ errorType: 'file', errorMessage: err });
+        return errors.allErrors;
     }
 }

@@ -7,7 +7,8 @@ import { S3Client, ListBucketsCommand } from '@aws-sdk/client-s3';
 export const s3Client = new S3Client({ region: 'ap-southeast-2' });
 import { auth } from 'express-oauth2-jwt-bearer';
 import jwtAuthz from 'express-jwt-authz';
-import { checkJwt, setToken } from './helpers/auth0Jwt';
+import { checkJwt } from './middlewares/auth0Jwt';
+import { errorHandler } from './middlewares/errorHandler';
 
 const app = express();
 
@@ -31,6 +32,7 @@ const corsOptions = {
 app.use(express.static('public'));
 app.use(cors(corsOptions));
 app.use('/', router);
+app.use(errorHandler);
 
 const port = 4321;
 

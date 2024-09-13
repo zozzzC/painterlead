@@ -7,28 +7,20 @@ export default function Test() {
   const { getAccessTokenSilently } = useAuth0();
 
   const callApi = async () => {
-    try {
-      console.log("running");
+    const token = await getAccessTokenSilently();
 
-      const token = await getAccessTokenSilently();
+    const response = await fetch("http://localhost:4321/edit/mainTag", {
+      method: "GET",
+      // body: JSON.stringify({
+      //   name: "test",
+      // }),
+      headers: {
+        authorization: `Bearer ${token}`,
+        "Content-Type": "application/json",
+      },
+    });
 
-      console.log(token);
-
-      const response = await fetch("http://localhost:4321/edit/mainTag", {
-        method: "POST",
-        body: JSON.stringify({
-          name: "test",
-        }),
-        headers: {
-          authorization: `Bearer ${token}`,
-          "Content-Type": "application/json",
-        },
-      });
-
-      return true;
-    } catch (err: any) {
-      console.log(err);
-    }
+    console.log(await response.json());
   };
 
   return (

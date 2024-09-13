@@ -25,7 +25,6 @@ export default function Carousel({
     } else {
       setIndex(() => index + 1);
     }
-    console.log(index);
   }
 
   function previousImage() {
@@ -34,7 +33,6 @@ export default function Carousel({
     } else {
       setIndex(() => index - 1);
     }
-    console.log(index);
   }
 
   return (
