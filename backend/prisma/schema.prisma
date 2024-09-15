@@ -64,6 +64,7 @@ model ArtistImages {
   id String @id @default(uuid())
   User   User @relation(fields: [artistId], references: [id])
   artistId String 
+  s3Url String
   CommissionToArtistImages CommissionToArtistImages[]
 }
 

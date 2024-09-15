@@ -5,17 +5,10 @@ import { z, ZodError } from 'zod';
 export default function validateReq(schema: z.ZodObject<any>) {
     return (req: Request, res: Response, next: NextFunction) => {
         try {
-            console.log(req.body);
             schema.parse(req.body);
             next();
         } catch (err) {
-            if (err instanceof ZodError) {
-                const error: { [key: string]: any } = {};
-                error['error'] = err.flatten().fieldErrors;
-                res.status(400).json(error);
-            } else {
-                res.status(500).json({ error: 'Internal Sever Error' });
-            }
+            next(err);
         }
     };
 }

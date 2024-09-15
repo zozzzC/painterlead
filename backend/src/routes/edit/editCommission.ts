@@ -1,9 +1,9 @@
 import express from 'express';
 import { ArtistGeneralCommissionSchema } from '../../schema/artistGeneralCommission';
-import validateReq from '../../helpers/zodValidationGeneric';
+import validateReq from '../../middlewares/zodValidationGeneric';
 import { verifyJWT } from '../../helpers/jwt';
 import { PrismaClient } from '@prisma/client';
-import { checkJwt } from '../../helpers/auth0Jwt';
+import { checkJwt } from '../../middlewares/auth0Jwt';
 const prisma = new PrismaClient();
 const router = express.Router();
 

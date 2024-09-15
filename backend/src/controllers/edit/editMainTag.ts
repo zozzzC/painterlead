@@ -27,11 +27,19 @@ export async function getMainTag({ id }: { id: string }) {
             },
         });
 
+        if (!usersMainTags) {
+            errors.createNewError({
+                errorType: 'tag',
+                errorMessage: 'Tags were not found for the given user.',
+            });
+            return errors.allErrors;
+        }
+
         return usersMainTags;
-    } catch (err) {
+    } catch (err: any) {
         errors.createNewError({
             errorType: 'tag',
-            errorMessage: 'Tags were not found for the given user.',
+            errorMessage: err,
         });
         return errors.allErrors;
     }
@@ -55,11 +63,19 @@ export async function getMainTagByCommissionId({
                 id: commissionMainTags?.mainTagId,
             },
         });
+
+        if (!mainTag) {
+            errors.createNewError({
+                errorType: 'tag',
+                errorMessage: 'Tag was not found for the given commission ID.',
+            });
+            return errors.allErrors;
+        }
         return mainTag;
-    } catch (err) {
+    } catch (err : any) {
         errors.createNewError({
             errorType: 'tag',
-            errorMessage: 'Tag was not found for the given commission ID.',
+            errorMessage: err,
         });
         return errors.allErrors;
     }
@@ -110,11 +126,10 @@ export async function createMainTag({
         }
 
         return {};
-    } catch (err) {
-        console.log(err);
+    } catch (err : any) {
         errors.createNewError({
             errorType: 'tag',
-            errorMessage: 'Server error',
+            errorMessage: err,
         });
         return errors;
     }
