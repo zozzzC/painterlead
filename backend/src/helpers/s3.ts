@@ -47,54 +47,37 @@ export async function signedUrlPut({
     userId: string;
     fileType: string;
 }) {
-    const errors = new responseError();
-    try {
-        const key = crypto.randomBytes(16).toString('hex');
+    const key = crypto.randomBytes(16).toString('hex');
 
-        if (fileType === 'png' || fileType == 'jpeg') {
-            const params = {
-                Bucket: bucketName,
-                Key: `uploads/${userId}/${key.toString()}`,
-                Region: region,
-                ContentType: `image/${fileType}`,
-            };
+    if (fileType === 'png' || fileType == 'jpeg') {
+        const params = {
+            Bucket: bucketName,
+            Key: `uploads/${userId}/${key.toString()}`,
+            Region: region,
+            ContentType: `image/${fileType}`,
+        };
 
-            const command = new PutObjectCommand(params);
-            const url = await getSignedUrl(s3Client, command, {
-                expiresIn: 5000,
-            });
-            await associateUserImage({ userId, url });
-            const keyAndUrl = [key, url];
-            return keyAndUrl;
-        }
-        throw new FileTypeError(['PNG', 'JPEG']);
-        // errors.createNewError({
-        //     errorType: 'file',
-        //     errorMessage: 'File must be of PNG or JPEG type only.',
-        // });
-
-        // return errors.allErrors;
-    } catch (err: any) {
-        // errors.createNewError({ errorType: 'file', errorMessage: err });
-        // return errors.allErrors;
+        const command = new PutObjectCommand(params);
+        const url = await getSignedUrl(s3Client, command, {
+            expiresIn: 5000,
+        });
+        await associateUserImage({ userId, url });
+        const keyAndUrl = [key, url];
+        return keyAndUrl;
     }
+    throw new FileTypeError(['PNG', 'JPEG']);
 }
 
 async function signedUrlGet({ userId }: { userId: string }) {
     const errors = new responseError();
-    try {
-        const key = crypto.randomBytes(16).toString();
-        const params = {
-            Bucket: bucketName,
-            Key: userId,
-            Region: region,
-        };
+    const key = crypto.randomBytes(16).toString();
+    const params = {
+        Bucket: bucketName,
+        Key: userId,
+        Region: region,
+    };
 
-        const command = new GetObjectCommand(params);
-        const url = await getSignedUrl(s3Client, command, { expiresIn: 5000 });
-        return url;
-    } catch (err: any) {
-        errors.createNewError({ errorType: 'file', errorMessage: err });
-        return errors.allErrors;
-    }
+    const command = new GetObjectCommand(params);
+    const url = await getSignedUrl(s3Client, command, { expiresIn: 5000 });
+    return url;
 }

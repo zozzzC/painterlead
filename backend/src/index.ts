@@ -1,4 +1,4 @@
-import express from 'express';
+import express, { NextFunction } from 'express';
 import cors from 'cors';
 import jwt from 'jsonwebtoken';
 import dotenv from 'dotenv';
@@ -9,6 +9,7 @@ import { auth } from 'express-oauth2-jwt-bearer';
 import jwtAuthz from 'express-jwt-authz';
 import { checkJwt } from './middlewares/auth0Jwt';
 import { errorHandler } from './middlewares/errorHandler';
+import "express-async-errors";
 
 const app = express();
 
