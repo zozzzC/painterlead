@@ -49,7 +49,7 @@ export async function signedUrlPut({
 }) {
     const key = crypto.randomBytes(16).toString('hex');
 
-    if (fileType === 'png' || fileType == 'jpeg') {
+    if (fileType == 'png' || fileType == 'jpeg') {
         const params = {
             Bucket: bucketName,
             Key: `uploads/${userId}/${key.toString()}`,

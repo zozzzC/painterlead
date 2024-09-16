@@ -11,9 +11,7 @@ router.get(
     checkJwt,
     async (req: express.Request, res: express.Response, next: NextFunction) => {
         const nRequests = req.query.num;
-        const fileType = JSON.stringify(req.query.fileType);
-        console.log('sent');
-        console.log(fileType);
+        const fileType = String(req.query.fileType);
 
         if (!fileType) {
             return res.sendStatus(400);
