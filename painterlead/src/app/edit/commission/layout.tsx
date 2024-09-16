@@ -1,4 +1,5 @@
 /* eslint-disable react/react-in-jsx-scope */
+"use client";
 import RoundButton from "@/components/general/RoundButton";
 import Sidebar from "@/components/layout/sidebar";
 

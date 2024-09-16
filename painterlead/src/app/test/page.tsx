@@ -11,9 +11,6 @@ export default function Test() {
 
     const response = await fetch("http://localhost:4321/edit/mainTag", {
       method: "GET",
-      // body: JSON.stringify({
-      //   name: "test",
-      // }),
       headers: {
         authorization: `Bearer ${token}`,
         "Content-Type": "application/json",
