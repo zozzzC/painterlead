@@ -4,9 +4,9 @@ import Profile from "@/components/userpage/Profile";
 
 export default function Commission() {
   return (
-    <>
+    <div className="ml-sidebar">
       <Profile />
       <SortableGrid />
-    </>
+    </div>
   );
 }

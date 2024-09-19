@@ -8,6 +8,9 @@ const config: Config = {
   ],
   theme: {
     extend: {
+      margin: {
+        sidebar: "3rem",
+      },
       colors: {
         green: "#6CA779",
         red: "#E66F6F",
