@@ -24,25 +24,14 @@ router.get(
     '/',
     checkJwt,
     async (req: express.Request, res: express.Response) => {
-        try {
-            // @ts-ignore
-            const token = req.auth[`email`];
-            const id = await getIdFromEmail(token);
-            if (id) {
-                const result = await getMainTag({ id });
-                return res.status(200).json(result);
-                if (resResultIsError({ result })) {
-                    //if this is true, it is an error
-                    return res.status(400).json(result);
-                } else {
-                    return res.status(200).json(result);
-                }
-            }
-
-            return res.sendStatus(500);
-        } catch (err: any) {
-            return res.sendStatus(500);
+        // @ts-ignore
+        const token = req.auth[`email`];
+        const id = await getIdFromEmail(token);
+        if (id) {
+            const result = await getMainTag({ id });
+            return res.status(200).json(result);
         }
+        return res.sendStatus(500);
     },
 );
 
@@ -54,11 +43,6 @@ router.get(
         const commissionId = req.params.id;
         const result = await getMainTagByCommissionId({ commissionId });
         return res.status(201).json(result);
-        if (resResultIsError({ result })) {
-            return res.status(400).json(result);
-        } else {
-            return res.status(201).json(result);
-        }
     },
 );
 
@@ -72,13 +56,8 @@ router.post(
         const token = req.auth[`email`];
         const body = req.body;
 
-        const result = await createMainTag({ body, token });
+        await createMainTag({ body, token });
         return res.sendStatus(201);
-        if (resResultIsError({ result })) {
-            return res.status(400).json(result);
-        } else {
-            return res.sendStatus(201);
-        }
     },
 );
 
@@ -94,13 +73,8 @@ router.patch(
         const bodyWithId = req.body;
         if (id) {
             const result = await updateMainTag({ bodyWithId, id });
-            if (resResultIsError({ result })) {
-                return res.status(400).json(result);
-            } else {
-                return res.sendStatus(201);
-            }
+            return res.status(200);
         }
-        return res.sendStatus(500);
     },
 );
 
@@ -113,14 +87,8 @@ router.delete(
         // @ts-ignore
         const token = req?.token;
         const bodyWithId = req.body;
-
         const result = await deleteMainTag({ bodyWithId, token });
-
-        if (resResultIsError({ result })) {
-            return res.status(400).json(result);
-        } else {
-            return res.sendStatus(200);
-        }
+        return res.sendStatus(200);
     },
 );
 

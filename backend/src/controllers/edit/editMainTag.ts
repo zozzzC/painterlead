@@ -1,6 +1,11 @@
 import { PrismaClient, User } from '@prisma/client';
 import { getUserId } from '../../helpers/getUserId';
 import responseError from '../../helpers/error';
+import {
+    ExistsError,
+    GenericNotFound,
+    NotFoundForGivenItem,
+} from '../../helpers/error/errorTypes';
 const prisma = new PrismaClient();
 
 type Body = {
@@ -17,32 +22,19 @@ type BodyWithUserId = {
 };
 
 export async function getMainTag({ id }: { id: string }) {
-    const errors = new responseError();
-    try {
-        const userID = id;
+    const userID = id;
 
-        const usersMainTags = await prisma.mainTag.findMany({
-            where: {
-                artistId: userID,
-            },
-        });
+    const usersMainTags = await prisma.mainTag.findMany({
+        where: {
+            artistId: userID,
+        },
+    });
 
-        if (!usersMainTags) {
-            errors.createNewError({
-                errorType: 'tag',
-                errorMessage: 'Tags were not found for the given user.',
-            });
-            return errors.allErrors;
-        }
-
-        return usersMainTags;
-    } catch (err: any) {
-        errors.createNewError({
-            errorType: 'tag',
-            errorMessage: err,
-        });
-        return errors.allErrors;
+    if (!usersMainTags) {
+        throw new NotFoundForGivenItem('Main Tag', 'user');
     }
+
+    return usersMainTags;
 }
 
 export async function getMainTagByCommissionId({
@@ -50,35 +42,21 @@ export async function getMainTagByCommissionId({
 }: {
     commissionId: string;
 }) {
-    const errors = new responseError();
-    try {
-        const commissionMainTags =
-            await prisma.artistGeneralCommission.findFirst({
-                where: {
-                    id: commissionId,
-                },
-            });
-        const mainTag = await prisma.mainTag.findFirst({
-            where: {
-                id: commissionMainTags?.mainTagId,
-            },
-        });
+    const commissionMainTags = await prisma.artistGeneralCommission.findFirst({
+        where: {
+            id: commissionId,
+        },
+    });
+    const mainTag = await prisma.mainTag.findFirst({
+        where: {
+            id: commissionMainTags?.mainTagId,
+        },
+    });
 
-        if (!mainTag) {
-            errors.createNewError({
-                errorType: 'tag',
-                errorMessage: 'Tag was not found for the given commission ID.',
-            });
-            return errors.allErrors;
-        }
-        return mainTag;
-    } catch (err : any) {
-        errors.createNewError({
-            errorType: 'tag',
-            errorMessage: err,
-        });
-        return errors.allErrors;
+    if (!mainTag) {
+        throw new NotFoundForGivenItem('Main Tag', 'commission');
     }
+    return mainTag;
 }
 
 export async function createMainTag({
@@ -87,51 +65,34 @@ export async function createMainTag({
 }: {
     body: Body;
     token: string;
-}): Promise<Object | undefined> {
-    const errors = new responseError();
-    try {
-        const user = await prisma.user.findUnique({
-            where: {
-                email: token,
-            },
-        });
+}) {
+    const user = await prisma.user.findUnique({
+        where: {
+            email: token,
+        },
+    });
 
-        console.log(user);
+    const userId = user?.id;
 
-        const userId = user?.id;
+    const userMainTagExists = await prisma.mainTag.findFirst({
+        where: {
+            artistId: userId,
+            name: body.name,
+        },
+    });
+    console.log(userMainTagExists);
 
-        const userMainTagExists = await prisma.mainTag.findFirst({
-            where: {
-                artistId: userId,
+    if (userMainTagExists) {
+        throw new ExistsError('Main Tag');
+    }
+
+    if (userId) {
+        await prisma.mainTag.create({
+            data: {
                 name: body.name,
+                artistId: userId,
             },
         });
-        console.log(userMainTagExists);
-
-        if (userMainTagExists) {
-            errors.createNewError({
-                errorType: 'tag',
-                errorMessage: 'This tag already exists',
-            });
-            return errors;
-        }
-
-        if (userId) {
-            await prisma.mainTag.create({
-                data: {
-                    name: body.name,
-                    artistId: userId,
-                },
-            });
-        }
-
-        return {};
-    } catch (err : any) {
-        errors.createNewError({
-            errorType: 'tag',
-            errorMessage: err,
-        });
-        return errors;
     }
 }
 
@@ -143,7 +104,6 @@ export async function updateMainTag({
     bodyWithId: BodyWithId;
     id: string;
 }): Promise<Object | undefined> {
-    const errors = new responseError();
     const mainTagId = bodyWithId.id;
 
     const user = await prisma.user.findUnique({
@@ -153,34 +113,23 @@ export async function updateMainTag({
     });
 
     if (!user) {
-        errors.createNewError({
-            errorType: 'tag',
-            errorMessage: 'User not found.',
-        });
-        return errors;
+        throw new GenericNotFound('User');
     }
 
     const userId = user.id;
 
-    try {
-        if (userId) {
-            await prisma.mainTag.update({
-                where: {
-                    id: mainTagId,
-                    artistId: userId,
-                },
-                data: {
-                    ...bodyWithId,
-                },
-            });
-        }
-    } catch (err) {
-        errors.createNewError({
-            errorType: 'tag',
-            errorMessage: 'You are not authorised to change this resource',
+    if (userId) {
+        await prisma.mainTag.update({
+            where: {
+                id: mainTagId,
+                artistId: userId,
+            },
+            data: {
+                ...bodyWithId,
+            },
         });
-        return errors;
     }
+
     return {};
 }
 

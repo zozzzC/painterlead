@@ -29,6 +29,10 @@ export async function getImagesByUser({ userId }: { userId: string }) {
     }
 }
 
+export async function getImagesByCommissionId({ commissionId } : {commissionId: string})  {
+    
+}
+
 export async function getImage({
     userId,
     imageId,

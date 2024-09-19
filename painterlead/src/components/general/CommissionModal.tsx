@@ -2,6 +2,7 @@ import Image from "next/image";
 import Carousel from "./Carousel";
 import kaveh from "@/test/kaveh.jpg";
 import { CancelCircleIcon } from "hugeicons-react";
+import { useAuth0 } from "@auth0/auth0-react";
 
 export default function CommissionModal({
   id,
@@ -11,7 +12,7 @@ export default function CommissionModal({
   handleShowModal: ({ id }: { id: Number }) => any;
 }) {
   return (
-    <div className="z-10 fixed left-0 top-0 flex box-border border items-center justify-center h-full w-full bg-lightest-grey bg-opacity-50">
+    <div className="z-10 fixed left-0 top-0 flex box-border items-center justify-center h-full w-full bg-lightest-grey bg-opacity-50">
       <div className="relative outline-lightest-grey outline outline-4 rounded-md h-5/6 w-5/6 bg-dark-grey">
         <div className="z-20 absolute right-0 m-5">
           <button onClick={() => handleShowModal({ id })}>

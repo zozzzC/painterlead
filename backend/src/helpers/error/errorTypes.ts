@@ -60,7 +60,20 @@ export class ExistsError extends Error {
 
     constructor(value: string) {
         super();
-        this.message = `The value of ${value} already exists.`;
+        this.message = `The inputted value for ${value} already exists.`;
+    }
+
+    getMessage() {
+        return this.message;
+    }
+}
+
+export class NotFoundForGivenItem extends Error { 
+    message: string;
+
+    constructor(name: string, item: string) {
+        super();
+        this.message = `${name} was not found for the given ${item}.`
     }
 
     getMessage() {
