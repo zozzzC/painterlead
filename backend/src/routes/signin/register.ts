@@ -1,10 +1,11 @@
-// import express from 'express';
-// import registerUser from '../../controllers/signin/register';
-// import { register } from 'module';
-// import { UserSchema } from '../../schema/user';
-// import validateReq from '../../helpers/zodValidationGeneric';
-// import { signJWT } from '../../helpers/jwt';
-// const router = express.Router();
+import express from 'express';
+import registerUser from '../../controllers/signin/register';
+import { register } from 'module';
+import { UserSchema } from '../../schema/user';
+import { signJWT } from '../../helpers/jwt';
+const router = express.Router();
+
+
 
 // router.post(
 //     '/',

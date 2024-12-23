@@ -3,6 +3,11 @@
 
 // Looking for ways to speed up your queries, or scale easily with your serverless or edge functions?
 // Try Prisma Accelerate: https://pris.ly/cli/accelerate-init
+enum Status {
+    OPEN
+    WAITLIST
+    CLOSED
+}
 
 generator client {
   provider = "prisma-client-js"
@@ -14,18 +19,13 @@ datasource db {
 }
 
 model User {
-  id String @id @default(uuid())
+  id String @id @default(uuid()) @unique
   email    String @unique
   artistGeneralCommissions ArtistGeneralCommission[]
   artistImages ArtistImages[] 
   mainTag MainTag[]
 }
 
-enum Status { 
-  OPEN
-  WAITLIST
-  CLOSED
-}
 
 model ArtistGeneralCommission { 
   id String @id @default(uuid())

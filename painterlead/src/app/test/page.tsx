@@ -9,6 +9,8 @@ export default function Test() {
   const callApi = async () => {
     const token = await getAccessTokenSilently();
 
+    console.log(token);
+
     const response = await fetch("http://localhost:4321/edit/mainTag", {
       method: "GET",
       headers: {

@@ -4,8 +4,15 @@ import validateReq from '../../middlewares/zodValidationGeneric';
 import { verifyJWT } from '../../helpers/jwt';
 import { PrismaClient } from '@prisma/client';
 import { checkJwt } from '../../middlewares/auth0Jwt';
+import { ExistsError } from '../../helpers/error/errorTypes';
+import { getIdFromEmail } from '../../helpers/getIdFromEmail';
+import { createCommission } from '../../controllers/edit/editCommission';
 const prisma = new PrismaClient();
 const router = express.Router();
+
+router.get('/artist/:commissionId', async (req: express.Request, res: express.Response) => {
+    
+})
 
 router.get(
     '/artist/:artistId',
@@ -14,6 +21,7 @@ router.get(
             const artistId = req?.params['artistId'];
 
             if (artistId) {
+
                 const findArtistCommissions =
                     await prisma.artistGeneralCommission.findMany({
                         where: {
@@ -34,52 +42,43 @@ router.get('/', async (req: express.Request, res: express.Response) => {
     res.sendStatus(201);
 });
 
-//non-param post means new post
+//non-param post means new commission
 router.post(
     '/',
     validateReq(ArtistGeneralCommissionSchema),
     checkJwt,
     async (req: express.Request, res: express.Response) => {
-        try {
-            // @ts-ignore
-            const token = req.auth[`email`];
-            const commissionId = req?.params['commissionId'];
-            const { name }: { name: string } = req.body;
+        // @ts-ignore
+        const token = req.auth[`email`];
+        const id = await getIdFromEmail(token);
+        const commissionId = req?.params['commissionId'];
+        const { name }: { name: string } = req.body;
+        await createCommission({id: id, commissionDetails: req.body})
 
-            const userId = await prisma.user.findUnique({
+
+        if (name && id) {
+
+            const nameExists = await prisma.artistGeneralCommission.findUnique({
+                //@ts-ignore
                 where: {
-                    email: token,
+                    artistId: id,
+                    name: name,
                 },
             });
 
-            if (name && userId) {
-                const nameExists =
-                    await prisma.artistGeneralCommission.findUnique({
-                        //@ts-ignore
-                        where: {
-                            artistId: userId.id,
-                            name: name,
-                        },
-                    });
-
-                if (nameExists) {
-                    res.sendStatus(400);
-                }
-
-                const newCommission =
-                    await prisma.artistGeneralCommission.create({
-                        data: {
-                            ...req.body,
-                            artistId: userId.id,
-                        },
-                    });
-
-                return res.sendStatus(201);
+            if (nameExists) {
+                throw new ExistsError(`Commission name ${name}`);
             }
 
+            await prisma.artistGeneralCommission.create({
+                data: {
+                    ...req.body,
+                    artistId: id,
+                },
+            });
+            res.sendStatus(201);
+        } else {
             res.sendStatus(400);
-        } catch (err) {
-            res.sendStatus(500);
         }
     },
 );

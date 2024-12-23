@@ -4,10 +4,13 @@ const router = express.Router();
 import { signedUrlPut } from '../../helpers/s3';
 import { getUserId } from '../../helpers/getUserId';
 import responseError from '../../helpers/error';
+import { PrismaClient } from '@prisma/client';
+import { checkJwt } from '../../middlewares/auth0Jwt';
+const prisma = new PrismaClient();
 
 router.post(
     '/',
-    verifyJWT(),
+    checkJwt,
     async (req: express.Request, res: express.Response) => {
         const errors = new responseError();
         try {
@@ -18,6 +21,14 @@ router.post(
             if (userId) {
                 const fileType = req.query.fileType as string;
                 const url = await signedUrlPut({ userId, fileType });
+                console.log('s3 url: ' + url);
+
+                // prisma.artistImages.create({
+                //     data: {
+                //     artistId: userId,
+                //     s3Url:
+                // }
+                // })
                 return res.status(201).send(url);
             }
 

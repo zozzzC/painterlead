@@ -11,6 +11,7 @@ export async function uploadImage({
 }) {
     try {
         const url = await signedUrlPut({ userId: userId, fileType: fileType });
+        
         return url;
     } catch (err) {
         return err;
