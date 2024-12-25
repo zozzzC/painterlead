@@ -5,7 +5,6 @@ import {
     MainTagSchemaId,
 } from '../../schema/mainTag';
 import validateReq from '../../middlewares/zodValidationGeneric';
-import { verifyJWT } from '../../helpers/jwt';
 import {
     createMainTag,
     deleteMainTag,
@@ -82,12 +81,12 @@ router.patch(
 router.delete(
     '/',
     validateReq(idOnly),
-    verifyJWT(),
+    checkJwt,
     async (req: express.Request, res: express.Response) => {
         // @ts-ignore
-        const token = req?.token;
+        const email = req?.auth?.email;
         const bodyWithId = req.body;
-        const result = await deleteMainTag({ bodyWithId, token });
+        const result = await deleteMainTag({ bodyWithId, email });
         return res.sendStatus(200);
     },
 );

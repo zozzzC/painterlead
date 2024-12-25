@@ -135,14 +135,14 @@ export async function updateMainTag({
 
 export async function deleteMainTag({
     bodyWithId,
-    token,
+    email,
 }: {
     bodyWithId: BodyWithId;
-    token: string;
+    email: string;
 }) {
     const errors = new responseError();
     try {
-        const userId = await getUserId({ token });
+        const userId = await getUserId({ email });
         if (userId) {
             await prisma.mainTag.delete({
                 where: {

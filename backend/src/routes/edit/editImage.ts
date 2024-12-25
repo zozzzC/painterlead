@@ -1,5 +1,4 @@
 import express from 'express';
-import { verifyJWT } from '../../helpers/jwt';
 const router = express.Router();
 import { signedUrlPut } from '../../helpers/s3';
 import { getUserId } from '../../helpers/getUserId';
@@ -15,8 +14,8 @@ router.post(
         const errors = new responseError();
         try {
             // @ts-ignore
-            const token = req?.token;
-            const userId = await getUserId({ token });
+            const email = req?.auth?.email;
+            const userId = await getUserId({ email });
 
             if (userId) {
                 const fileType = req.query.fileType as string;

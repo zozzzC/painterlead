@@ -1,7 +1,6 @@
 import express from 'express';
 import { ArtistGeneralCommissionSchema } from '../../schema/artistGeneralCommission';
 import validateReq from '../../middlewares/zodValidationGeneric';
-import { verifyJWT } from '../../helpers/jwt';
 import { PrismaClient } from '@prisma/client';
 import { checkJwt } from '../../middlewares/auth0Jwt';
 import { ExistsError } from '../../helpers/error/errorTypes';
@@ -10,9 +9,10 @@ import { createCommission } from '../../controllers/edit/editCommission';
 const prisma = new PrismaClient();
 const router = express.Router();
 
-router.get('/artist/:commissionId', async (req: express.Request, res: express.Response) => {
-    
-})
+router.get(
+    '/artist/:commissionId',
+    async (req: express.Request, res: express.Response) => {},
+);
 
 router.get(
     '/artist/:artistId',
@@ -21,7 +21,6 @@ router.get(
             const artistId = req?.params['artistId'];
 
             if (artistId) {
-
                 const findArtistCommissions =
                     await prisma.artistGeneralCommission.findMany({
                         where: {
@@ -53,11 +52,9 @@ router.post(
         const id = await getIdFromEmail(token);
         const commissionId = req?.params['commissionId'];
         const { name }: { name: string } = req.body;
-        await createCommission({id: id, commissionDetails: req.body})
-
+        await createCommission({ id: id, commissionDetails: req.body });
 
         if (name && id) {
-
             const nameExists = await prisma.artistGeneralCommission.findUnique({
                 //@ts-ignore
                 where: {
@@ -87,7 +84,7 @@ router.post(
 router.post(
     '/commission/:commissionId',
     validateReq(ArtistGeneralCommissionSchema),
-    verifyJWT(),
+    checkJwt,
     async (req: express.Request, res: express.Response) => {
         // @ts-ignore
         const token = req?.token;
