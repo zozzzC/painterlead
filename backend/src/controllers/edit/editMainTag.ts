@@ -1,6 +1,6 @@
 import { PrismaClient, User } from '@prisma/client';
 import { getUserId } from '../../helpers/getUserId';
-import responseError from '../../helpers/error';
+import responseError from '../../helpers/error/error';
 import {
     ExistsError,
     GenericNotFound,

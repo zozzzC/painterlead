@@ -7,7 +7,7 @@ import {
 } from '@aws-sdk/client-s3';
 import { PrismaClient, Prisma } from '@prisma/client';
 import crypto from 'crypto';
-import responseError from './error';
+import responseError from './error/error';
 import { FileTypeError } from './error/errorTypes';
 
 const prisma = new PrismaClient();

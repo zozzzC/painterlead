@@ -2,7 +2,7 @@ import express from 'express';
 const router = express.Router();
 import { signedUrlPut } from '../../helpers/s3';
 import { getUserId } from '../../helpers/getUserId';
-import responseError from '../../helpers/error';
+import responseError from '../../helpers/error/error';
 import { PrismaClient } from '@prisma/client';
 import { checkJwt } from '../../middlewares/auth0Jwt';
 const prisma = new PrismaClient();

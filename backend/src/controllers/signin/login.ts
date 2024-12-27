@@ -1,6 +1,6 @@
 import bcrypt from 'bcrypt';
 import { PrismaClient } from '@prisma/client';
-import responseError from '../../helpers/error';
+import responseError from '../../helpers/error/error';
 const prisma = new PrismaClient();
 
 export default async function loginUser({
