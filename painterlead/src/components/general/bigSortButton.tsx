@@ -1,11 +1,11 @@
 export default function BigSortButton({
   name,
   color,
-  active,
+  setActive,
 }: {
   name: String;
   color: String;
-  active?: boolean;
+  setActive: () => any; 
 }) {
   let style =
     "py-1 px-3 rounded-lg outline outline-" +
@@ -14,13 +14,13 @@ export default function BigSortButton({
     color +
     "";
 
-  if (active) {
+  if (setActive) {
     style = style + " active:bg-" + color;
   }
 
   return (
     <>
-      <button className={style}>{name}</button>
+    
     </>
   );
 }

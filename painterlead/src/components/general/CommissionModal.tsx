@@ -3,6 +3,8 @@ import Carousel from "./Carousel";
 import kaveh from "@/test/kaveh.jpg";
 import { CancelCircleIcon } from "hugeicons-react";
 import { useAuth0 } from "@auth0/auth0-react";
+import SmallSortButton from "./smallSortButton";
+import { useRef, useState } from "react";
 
 export default function CommissionModal({
   id,
@@ -11,8 +13,12 @@ export default function CommissionModal({
   id: Number;
   handleShowModal: ({ id }: { id: Number }) => any;
 }) {
+  const [editImage, setEditImage] = useState<boolean>(false);
+  const inputFile = useRef<HTMLInputElement | null>(null);
+
   return (
     <div className="z-10 fixed left-0 top-0 flex box-border items-center justify-center h-full w-full bg-lightest-grey bg-opacity-50">
+      <input type="file" ref={inputFile} style={{ display: "none" }}></input>
       <div className="relative outline-lightest-grey outline outline-4 rounded-md h-5/6 w-5/6 bg-dark-grey">
         <div className="z-20 absolute right-0 m-5">
           <button onClick={() => handleShowModal({ id })}>
@@ -23,6 +29,16 @@ export default function CommissionModal({
           <div className="px-3">
             {/* this should be replaced with a carousel later on. */}
             <Image src={kaveh} alt="image" />
+            <SmallSortButton
+              name="edit"
+              color="black"
+              onClick={() => {
+                setEditImage(false);
+                if (inputFile.current !== null) {
+                  inputFile.current.click();
+                }
+              }}
+            ></SmallSortButton>
           </div>
           <div className="h-full w-full py-10">
             <p className="text-5xl">title</p>
