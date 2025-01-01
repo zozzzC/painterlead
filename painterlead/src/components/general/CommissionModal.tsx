@@ -18,7 +18,12 @@ export default function CommissionModal({
 
   return (
     <div className="z-10 fixed left-0 top-0 flex box-border items-center justify-center h-full w-full bg-lightest-grey bg-opacity-50">
-      <input type="file" ref={inputFile} style={{ display: "none" }}></input>
+      <input
+        type="file"
+        ref={inputFile}
+        style={{ display: "none" }}
+        accept=".png,.jpeg"
+      ></input>
       <div className="relative outline-lightest-grey outline outline-4 rounded-md h-5/6 w-5/6 bg-dark-grey">
         <div className="z-20 absolute right-0 m-5">
           <button onClick={() => handleShowModal({ id })}>
