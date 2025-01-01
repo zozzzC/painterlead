@@ -1,6 +1,5 @@
 import { PrismaClient, User } from '@prisma/client';
 import { getUserId } from '../../helpers/getUserId';
-import responseError from '../../helpers/error/error';
 import {
     ExistsError,
     GenericNotFound,
@@ -140,28 +139,19 @@ export async function deleteMainTag({
     bodyWithId: BodyWithId;
     email: string;
 }) {
-    const errors = new responseError();
-    try {
-        const userId = await getUserId({ email });
-        if (userId) {
-            await prisma.mainTag.delete({
-                where: {
-                    id: bodyWithId.id,
-                },
-            });
+    const userId = await getUserId({ email });
 
-            return {};
-        }
-        errors.createNewError({
-            errorType: 'tag',
-            errorMessage: 'You are not authorized to change this resource',
+    if (userId) {
+        await prisma.mainTag.delete({
+            where: {
+                id: bodyWithId.id,
+            },
         });
-        return errors;
-    } catch (err) {
-        errors.createNewError({
-            errorType: 'tag',
-            errorMessage: 'Could not make tag',
-        });
-        return errors;
+
+        return {};
+    }
+
+    if (!userId) {
+        throw new GenericNotFound('User');
     }
 }

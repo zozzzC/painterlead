@@ -17,10 +17,9 @@ router.post(
                 return res.sendStatus(403);
             }
 
-            const body = req.body as s3ArtistImage;
             const userId = req.body.userId;
             const url = req.body.url;
-
+            //TODO: change this to delete image instead of create
             await prisma.artistImages.create({
                 data: {
                     artistId: userId,

@@ -47,7 +47,7 @@ export class GenericNotFound extends Error {
 export class UnauthorizedError extends Error {
     constructor() {
         super();
-        this.message = `You are not authorized to change this resource..`;
+        this.message = `You are not authorized to change this resource.`;
     }
 
     getMessage() {
@@ -68,12 +68,12 @@ export class ExistsError extends Error {
     }
 }
 
-export class NotFoundForGivenItem extends Error { 
+export class NotFoundForGivenItem extends Error {
     message: string;
 
     constructor(name: string, item: string) {
         super();
-        this.message = `${name} was not found for the given ${item}.`
+        this.message = `${name} was not found for the given ${item}.`;
     }
 
     getMessage() {

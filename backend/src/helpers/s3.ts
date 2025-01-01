@@ -7,7 +7,6 @@ import {
 } from '@aws-sdk/client-s3';
 import { PrismaClient, Prisma } from '@prisma/client';
 import crypto from 'crypto';
-import responseError from './error/error';
 import { FileTypeError } from './error/errorTypes';
 
 const prisma = new PrismaClient();
@@ -28,14 +27,17 @@ const s3Client = new S3Client({
 async function associateUserImage({
     userId,
     url,
+    key,
 }: {
     userId: string;
     url: string | URL;
+    key: string;
 }) {
-    const image = await prisma.artistImages.create({
+    await prisma.artistImages.create({
         data: {
             artistId: userId,
             s3Url: JSON.stringify(url),
+            s3Key: key,
         },
     });
 }
@@ -61,7 +63,7 @@ export async function signedUrlPut({
         const url = await getSignedUrl(s3Client, command, {
             expiresIn: 5000,
         });
-        await associateUserImage({ userId, url });
+        await associateUserImage({ userId, url, key });
         const keyAndUrl = [key, url];
         return keyAndUrl;
     }
@@ -69,7 +71,6 @@ export async function signedUrlPut({
 }
 
 async function signedUrlGet({ userId }: { userId: string }) {
-    const errors = new responseError();
     const key = crypto.randomBytes(16).toString();
     const params = {
         Bucket: bucketName,
