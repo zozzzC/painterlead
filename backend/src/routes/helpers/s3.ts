@@ -12,8 +12,9 @@ router.get(
     async (req: express.Request, res: express.Response, next: NextFunction) => {
         const nRequests = req.query.num;
         const fileType = String(req.query.fileType);
+        const fileSize = String(req.query.fileSize);
 
-        if (!fileType) {
+        if (!fileType || !fileSize) {
             return res.sendStatus(400);
         }
 
@@ -22,7 +23,7 @@ router.get(
         const userId = await getIdFromEmail(token);
         if (!nRequests) {
             if (userId) {
-                const url = await signedUrlPut({ userId, fileType });
+                const url = await signedUrlPut({ userId, fileType, fileSize });
                 if (resResult({ result: url })) {
                     return res.status(200).json(url);
                 }
@@ -32,14 +33,14 @@ router.get(
             let responses = [];
 
             for (let index = 0; index <= Number(nRequests); index++) {
-                const url = await signedUrlPut({ userId, fileType });
+                const url = await signedUrlPut({ userId, fileType, fileSize });
                 responses.push(url);
             }
             return res.status(200).json(responses);
         }
 
         if (userId) {
-            const result = await signedUrlPut({ userId, fileType });
+            const result = await signedUrlPut({ userId, fileType, fileSize });
             return res.status(200).json(result);
         }
 

@@ -45,9 +45,11 @@ async function associateUserImage({
 export async function signedUrlPut({
     userId,
     fileType,
+    fileSize,
 }: {
     userId: string;
     fileType: string;
+    fileSize: string;
 }) {
     const key = crypto.randomBytes(16).toString('hex');
 
@@ -55,6 +57,7 @@ export async function signedUrlPut({
         const params = {
             Bucket: bucketName,
             Key: `uploads/${userId}/${key.toString()}`,
+            ContentLength: parseInt(fileSize),
             Region: region,
             ContentType: `image/${fileType}`,
         };

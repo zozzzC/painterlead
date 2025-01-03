@@ -5,6 +5,7 @@ import { CancelCircleIcon } from "hugeicons-react";
 import { useAuth0 } from "@auth0/auth0-react";
 import SmallSortButton from "./smallSortButton";
 import { useRef, useState } from "react";
+import getPresignedUrl from "@/functions/getPresignedUrl";
 
 export default function CommissionModal({
   id,
@@ -15,6 +16,39 @@ export default function CommissionModal({
 }) {
   const [editImage, setEditImage] = useState<boolean>(false);
   const inputFile = useRef<HTMLInputElement | null>(null);
+  const { getAccessTokenSilently } = useAuth0();
+
+  async function handleFileChange() {
+    console.log("handle file changed");
+    const token = await getAccessTokenSilently();
+    if (inputFile.current?.files) {
+      console.log("file found");
+      const file = inputFile.current.files[0];
+      const reader = new FileReader();
+      reader.readAsText(file);
+      reader.onload = async (e) => {
+        const s3 = await getPresignedUrl({
+          accessToken: token,
+          fileType: file.type.toString().split("/")[1],
+          fileSize: file.size.toString()
+        });
+        if (s3) {
+          try {
+            const res = await fetch(s3, {
+              method: "PUT",
+              headers: {
+                "Content-Type": "multipart/form-data",
+              },
+              body: file,
+            });
+            console.log(res);
+          } catch (err: any) {
+            console.log(err);
+          }
+        }
+      };
+    }
+  }
 
   return (
     <div className="z-10 fixed left-0 top-0 flex box-border items-center justify-center h-full w-full bg-lightest-grey bg-opacity-50">
@@ -23,6 +57,7 @@ export default function CommissionModal({
         ref={inputFile}
         style={{ display: "none" }}
         accept=".png,.jpeg"
+        onChange={handleFileChange}
       ></input>
       <div className="relative outline-lightest-grey outline outline-4 rounded-md h-5/6 w-5/6 bg-dark-grey">
         <div className="z-20 absolute right-0 m-5">
