@@ -42,6 +42,7 @@ router.get('/', async (req: express.Request, res: express.Response) => {
 });
 
 //non-param post means new commission
+//TODO: move the logic in this to a controller
 router.post(
     '/',
     validateReq(ArtistGeneralCommissionSchema),

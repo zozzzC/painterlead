@@ -2,6 +2,10 @@ import axios from "axios";
 import React from "react";
 import kokomi from "@/test/kokomi.png";
 
+type presignedUrlResponse = {
+  s3Url: string;
+};
+
 export default async function getPresignedUrl({
   accessToken,
   fileType,
@@ -37,5 +41,7 @@ export default async function getPresignedUrl({
     },
   );
 
-  return await JSON.stringify(res.json);
+  //TODO: fix the issue where the s3 url is not returning properly/is unaccessible
+
+  return ((await res.json()) as presignedUrlResponse).s3Url;
 }

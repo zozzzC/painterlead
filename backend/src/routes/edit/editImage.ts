@@ -18,7 +18,7 @@ router.post(
             const fileType = req.query.fileType as string;
             const fileSize = req.query.fileSize as string;
             const url = await signedUrlPut({ userId, fileType, fileSize });
-            console.log('s3 url: ' + url);
+            console.log('s3 url: ' + url[1]);
 
             // prisma.artistImages.create({
             //     data: {
@@ -26,7 +26,7 @@ router.post(
             //     s3Url:
             // }
             // })
-            return res.status(201).send(url);
+            return res.status(201).json({ s3Url: url[1] });
         }
 
         return res.sendStatus(400);

@@ -30,22 +30,25 @@ export default function CommissionModal({
         const s3 = await getPresignedUrl({
           accessToken: token,
           fileType: file.type.toString().split("/")[1],
-          fileSize: file.size.toString()
+          fileSize: file.size.toString(),
         });
+
         if (s3) {
+          console.log(s3);
           try {
             const res = await fetch(s3, {
               method: "PUT",
               headers: {
-                "Content-Type": "multipart/form-data",
+                "Content-Type": file.type.toString(),
               },
               body: file,
             });
-            console.log(res);
+            console.log(res + "done");
           } catch (err: any) {
             console.log(err);
           }
         }
+        console.log("Cannot find s3");
       };
     }
   }

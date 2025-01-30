@@ -24,10 +24,7 @@ router.get(
         if (!nRequests) {
             if (userId) {
                 const url = await signedUrlPut({ userId, fileType, fileSize });
-                if (resResult({ result: url })) {
-                    return res.status(200).json(url);
-                }
-                return res.status(400).json(url);
+                return res.status(200).json(url);
             }
         } else if (nRequests && userId) {
             let responses = [];
