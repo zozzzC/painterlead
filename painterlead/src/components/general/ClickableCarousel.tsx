@@ -14,11 +14,9 @@ type images = {
 export default function Carousel({
   id,
   images,
-  // handleShowModal,
 }: {
   id: Number;
   images: images[];
-  // handleShowModal: ({ id }: { id: Number }) => any;
 }) {
   const [index, setIndex] = useState<number>(0);
   const modalRef = useRef<React.JSX.Element>();
