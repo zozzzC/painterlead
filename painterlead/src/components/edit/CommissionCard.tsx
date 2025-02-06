@@ -2,7 +2,7 @@ import { useSortable } from "@dnd-kit/sortable";
 import { CSS } from "@dnd-kit/utilities";
 import { StaticImageData } from "next/image";
 import Image from "next/image";
-import Carousel from "../general/Carousel";
+import Carousel from "../general/ClickableCarousel";
 import { useState } from "react";
 
 type images = {
@@ -18,13 +18,11 @@ export default function CommissionCard({
   name,
   images,
   tags,
-  handleShowModal,
 }: {
   id: number;
   name: string;
   images: images[];
   tags?: string;
-  handleShowModal: ({ id }: { id: Number }) => any;
 }) {
   const { attributes, listeners, setNodeRef, transform, transition } =
     useSortable({
@@ -42,7 +40,7 @@ export default function CommissionCard({
     <div className="mx-5">
       <div ref={setNodeRef} {...attributes} {...listeners} style={style}>
         <div className="h-72 rounded-md outline outline-4 relative overflow-hidden m-5">
-          <Carousel id={id} images={images} handleShowModal={handleShowModal} />
+          <Carousel id={id} images={images} />
         </div>
         <div className="m-5">
           <p className="font-bold text-xl">{name}</p>

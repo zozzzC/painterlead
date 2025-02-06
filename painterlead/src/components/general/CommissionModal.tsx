@@ -1,18 +1,18 @@
 import Image from "next/image";
-import Carousel from "./Carousel";
+import Carousel from "./ClickableCarousel";
 import kaveh from "@/test/kaveh.jpg";
 import { CancelCircleIcon } from "hugeicons-react";
 import { useAuth0 } from "@auth0/auth0-react";
 import SmallSortButton from "./smallSortButton";
-import { useRef, useState } from "react";
+import React, { useRef, useState } from "react";
 import getPresignedUrl from "@/functions/getPresignedUrl";
 
 export default function CommissionModal({
   id,
-  handleShowModal,
+  toggleActive,
 }: {
   id: Number;
-  handleShowModal: ({ id }: { id: Number }) => any;
+  toggleActive: () => void;
 }) {
   const [editImage, setEditImage] = useState<boolean>(false);
   const inputFile = useRef<HTMLInputElement | null>(null);
@@ -64,7 +64,7 @@ export default function CommissionModal({
       ></input>
       <div className="relative outline-lightest-grey outline outline-4 rounded-md h-5/6 w-5/6 bg-dark-grey">
         <div className="z-20 absolute right-0 m-5">
-          <button onClick={() => handleShowModal({ id })}>
+          <button onClick={toggleActive}>
             <CancelCircleIcon size={30} />
           </button>
         </div>
@@ -84,7 +84,7 @@ export default function CommissionModal({
             ></SmallSortButton>
           </div>
           <div className="h-full w-full py-10">
-            <p className="text-5xl">title</p>
+            <p className="text-5xl">title {JSON.stringify(id)}</p>
             <div>
               <p className="text-2xl">open</p>
             </div>

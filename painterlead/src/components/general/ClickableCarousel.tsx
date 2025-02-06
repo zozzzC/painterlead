@@ -1,7 +1,10 @@
 import Image from "next/image";
-import { useState } from "react";
+import { useRef, useState } from "react";
 import { StaticImageData } from "next/image";
 import { CircleArrowLeft02Icon, CircleArrowRight02Icon } from "hugeicons-react";
+import CommissionModal from "./CommissionModal";
+import useModal from "@/hooks/useModal";
+import React from "react";
 
 type images = {
   name: string;
@@ -11,13 +14,15 @@ type images = {
 export default function Carousel({
   id,
   images,
-  handleShowModal,
+  // handleShowModal,
 }: {
   id: Number;
   images: images[];
-  handleShowModal: ({ id }: { id: Number }) => any;
+  // handleShowModal: ({ id }: { id: Number }) => any;
 }) {
   const [index, setIndex] = useState<number>(0);
+  const modalRef = useRef<React.JSX.Element>();
+  const [active, toggleActive] = useModal(modalRef);
 
   function nextImage() {
     if (index > images.length - 2) {
@@ -37,13 +42,16 @@ export default function Carousel({
 
   return (
     <div>
+      {active ? (
+        <CommissionModal id={id} toggleActive={toggleActive} />
+      ) : undefined}
       <Image
         className={"rounded-md"}
         draggable={false}
         src={images[index].src}
         alt="image"
         fill={true}
-        onClick={() => handleShowModal({ id })}
+        onClick={toggleActive}
         style={{ objectFit: "cover" }}
       />
       <button onClick={previousImage} className="absolute top-1/2 ml-2">

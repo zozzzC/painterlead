@@ -1,15 +1,16 @@
-import { useEffect, useState } from "react";
+import React, { useEffect, useState } from "react";
 
 export default function useModal(
-  containerRef: React.Ref<HTMLDivElement>,
+  containerRef: React.MutableRefObject<React.JSX.Element | undefined>,
 ) {
   const [activeModal, setActiveModal] =
-    useState<React.Ref<HTMLDivElement>>(containerRef);
+    useState<React.Ref<React.JSX.Element | undefined>>(containerRef);
   const [active, setActive] = useState<boolean>(false);
 
-  function toggleActive() {
+  function toggleActive(): void {
     setActive(() => !active);
+    console.log("HELLO!");
   }
-
-  return [toggleActive, active];
+  const returnArray: [boolean, () => void] = [active, toggleActive];
+  return returnArray;
 }
