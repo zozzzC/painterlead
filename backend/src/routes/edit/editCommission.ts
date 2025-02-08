@@ -88,27 +88,70 @@ router.post(
     checkJwt,
     async (req: express.Request, res: express.Response) => {
         // @ts-ignore
-        const token = req?.token;
+        const email = req.auth[`email`];
+        const id = await getIdFromEmail(email);
+
         const commissionId = req?.params['commissionId'];
-        // @ts-ignore
-        if (req.token) {
+
+        if (email) {
             const matchJWTWithCommission =
                 await prisma.artistGeneralCommission.findUnique({
                     where: {
                         // @ts-ignore
-                        artistId: parseInt(req.token.username),
+                        artistId: parseInt(id),
                         id: commissionId,
                     },
                 });
-            // if (matchJWTWithCommission) {
-            //     const updateCommission =
-            //         await prisma.artistGeneralCommission.update({
-            //             where: {
-            //                 id: parseInt(commissionId),
-            //             },
-            //             update: req.body,
-            //         });
-            // }
+
+            if (matchJWTWithCommission) {
+                await prisma.artistGeneralCommission.update({
+                    where: {
+                        id: commissionId,
+                    },
+                    data: { ...req.body },
+                });
+                res.sendStatus(200);
+            } else {
+                res.sendStatus(403);
+            }
+
+            res.sendStatus(403);
+        }
+    },
+);
+
+router.delete(
+    '/commission/:commissionId',
+    checkJwt,
+    async (req: express.Request, res: express.Response) => {
+        // @ts-ignore
+        const email = req.auth[`email`];
+        const id = await getIdFromEmail(email);
+
+        const commissionId = req.params.commissionId;
+
+        if (email) {
+            const matchJWTWithCommission =
+                await prisma.artistGeneralCommission.findUnique({
+                    where: {
+                        // @ts-ignore
+                        artistId: parseInt(id),
+                        id: commissionId,
+                    },
+                });
+
+            if (matchJWTWithCommission) {
+                await prisma.artistGeneralCommission.delete({
+                    where: {
+                        id: commissionId,
+                    },
+                });
+                res.sendStatus(200);
+            } else {
+                res.sendStatus(403);
+            }
+
+            res.sendStatus(403);
         }
     },
 );

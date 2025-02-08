@@ -16,7 +16,7 @@ export default function CommissionModal({
 }) {
   const [editImage, setEditImage] = useState<boolean>(false);
   const inputFile = useRef<HTMLInputElement | null>(null);
-  const { getAccessTokenSilently } = useAuth0();
+  const { getAccessTokenSilently, isAuthenticated } = useAuth0();
 
   async function handleFileChange() {
     console.log("handle file changed");
@@ -73,7 +73,6 @@ export default function CommissionModal({
             {/* this should be replaced with a carousel later on. */}
             <Image src={kaveh} alt="image" />
             <SmallSortButton
-              name="edit"
               color="black"
               onClick={() => {
                 setEditImage(false);
@@ -81,7 +80,9 @@ export default function CommissionModal({
                   inputFile.current.click();
                 }
               }}
-            ></SmallSortButton>
+            >
+              edit
+            </SmallSortButton>
           </div>
           <div className="h-full w-full py-10">
             <p className="text-5xl">title {JSON.stringify(id)}</p>
@@ -93,7 +94,10 @@ export default function CommissionModal({
             <p>test</p>
             <p className="text-2xl">add-ons</p>
             <p>test</p>
-            <button>create request</button>
+            <SmallSortButton color="black">create request</SmallSortButton>
+            {isAuthenticated ? (
+              <SmallSortButton color="black">edit</SmallSortButton>
+            ) : undefined}
           </div>
         </div>
       </div>

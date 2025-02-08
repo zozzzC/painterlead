@@ -26,6 +26,7 @@ router.get(
         // @ts-ignore
         const token = req.auth[`email`];
         const id = await getIdFromEmail(token);
+
         if (id) {
             const result = await getMainTag({ id });
             return res.status(200).json(result);

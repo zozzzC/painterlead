@@ -1,11 +1,11 @@
 export default function SmallSortButton({
-  name,
   color,
   onClick,
+  children,
 }: {
-  name: String;
   color: String;
-  onClick: () => any;
+  onClick?: () => any;
+  children: React.ReactNode;
 }) {
   var style =
     "py-1 px-3 rounded-xl outline outline-" +
@@ -21,7 +21,7 @@ export default function SmallSortButton({
   return (
     <>
       <button className={style} onClick={onClick}>
-        {name}
+        {children}
       </button>
     </>
   );
