@@ -60,11 +60,37 @@ router.post(
     checkJwt,
     async (req: express.Request, res: express.Response) => {
         // @ts-ignore
+        // @ts-ignore
         const token = req.auth[`email`];
-        const id = await getIdFromEmail(token);
-        const commissionId = req?.params['commissionId'];
+        const userId = await getIdFromEmail(token);
+        
         const { name }: { name: string } = req.body;
-        await createCommission({ id: id, commissionDetails: req.body });
+        await createCommission({ userId: userId, commissionDetails: req.body });
+
+        
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
         if (name && id) {
             const nameExists = await prisma.artistGeneralCommission.findUnique({
@@ -76,7 +102,7 @@ router.post(
             });
 
             if (nameExists) {
-                throw new ExistsError(`Commission name ${name}`);
+                throw new ExistsError(`Commission Name ${name}`);
             }
 
             await prisma.artistGeneralCommission.create({

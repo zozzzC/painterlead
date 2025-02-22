@@ -34,18 +34,18 @@ export async function getCommissionById({
 }
 
 export async function createCommission({
-    id,
+    userId,
     commissionDetails,
 }: {
-    id: string;
+    userId: string;
     commissionDetails: commissionDetails;
 }) {
     const { name } = commissionDetails;
 
     const findExistingCommission =
-        await prisma.artistGeneralCommission.findMany({
+        await prisma.artistGeneralCommission.findUnique({
             where: {
-                artistId: id,
+                id: userId,
                 name: name,
             },
         });
@@ -54,8 +54,12 @@ export async function createCommission({
         throw new ExistsError(name);
     }
 
-    // await prisma.artistGeneralCommission.create()
-    
+    await prisma.artistGeneralCommission.create({
+        data: {
+            ...commissionDetails,
+            artistId: userId,
+        },
+    });
 
 }
 

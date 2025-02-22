@@ -5,5 +5,5 @@ export type commissionDetails = {
     blurb: string | null;
     description: string | null;
     optionalTagId: string | null;
-    mainTagId: string | null;
+    mainTagId: string;
 };
