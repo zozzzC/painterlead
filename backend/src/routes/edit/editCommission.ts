@@ -3,43 +3,54 @@ import { ArtistGeneralCommissionSchema } from '../../schema/artistGeneralCommiss
 import validateReq from '../../middlewares/zodValidationGeneric';
 import { PrismaClient } from '@prisma/client';
 import { checkJwt } from '../../middlewares/auth0Jwt';
-import { ExistsError } from '../../helpers/error/errorTypes';
+import {
+    ExistsError,
+    NotFoundForGivenItem,
+} from '../../helpers/error/errorTypes';
 import { getIdFromEmail } from '../../helpers/getIdFromEmail';
 import { createCommission } from '../../controllers/edit/editCommission';
 const prisma = new PrismaClient();
 const router = express.Router();
 
 router.get(
-    '/artist/:commissionId',
-    async (req: express.Request, res: express.Response) => {},
+    '/:commissionId',
+    async (req: express.Request, res: express.Response) => {
+        const commissionId = req?.params['commissionId'];
+
+        const findCommission = await prisma.artistGeneralCommission.findFirst({
+            where: {
+                id: commissionId,
+            },
+        });
+
+        if (findCommission) {
+            return res.status(200).json(findCommission);
+        }
+
+        return res.sendStatus(404);
+    },
 );
 
 router.get(
     '/artist/:artistId',
     async (req: express.Request, res: express.Response) => {
-        try {
-            const artistId = req?.params['artistId'];
+        const artistId = req?.params['artistId'];
 
-            if (artistId) {
-                const findArtistCommissions =
-                    await prisma.artistGeneralCommission.findMany({
-                        where: {
-                            artistId: artistId,
-                        },
-                    });
+        const findArtistCommission =
+            await prisma.artistGeneralCommission.findMany({
+                where: {
+                    artistId: artistId,
+                },
+            });
 
-                return res.status(200).json(findArtistCommissions);
-            }
-        } catch (err) {
-            return res.sendStatus(500);
+        if (findArtistCommission.length != 0) {
+            //need to use this since findMany returns an array
+            return res.status(200).json(findArtistCommission);
         }
+
+        return res.sendStatus(404);
     },
 );
-
-router.get('/', async (req: express.Request, res: express.Response) => {
-    console.log('edit get');
-    res.sendStatus(201);
-});
 
 //non-param post means new commission
 //TODO: move the logic in this to a controller
