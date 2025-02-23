@@ -63,58 +63,11 @@ router.post(
         // @ts-ignore
         const token = req.auth[`email`];
         const userId = await getIdFromEmail(token);
-        
+
         const { name }: { name: string } = req.body;
         await createCommission({ userId: userId, commissionDetails: req.body });
 
-        
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-        if (name && id) {
-            const nameExists = await prisma.artistGeneralCommission.findUnique({
-                //@ts-ignore
-                where: {
-                    artistId: id,
-                    name: name,
-                },
-            });
-
-            if (nameExists) {
-                throw new ExistsError(`Commission Name ${name}`);
-            }
-
-            await prisma.artistGeneralCommission.create({
-                data: {
-                    ...req.body,
-                    artistId: id,
-                },
-            });
-            res.sendStatus(201);
-        } else {
-            res.sendStatus(400);
-        }
+        return res.sendStatus(201);
     },
 );
 

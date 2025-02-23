@@ -2,9 +2,7 @@ import { PrismaClient, User } from '@prisma/client';
 import { GenericNotFound } from './error/errorTypes';
 const prisma = new PrismaClient();
 
-export async function getIdFromEmail(token: string) {
-    const email = token;
-
+export async function getIdFromEmail(email: string) {
     const user = await prisma.user.findUnique({
         where: {
             email: email,

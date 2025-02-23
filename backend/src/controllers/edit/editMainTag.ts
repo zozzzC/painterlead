@@ -1,10 +1,10 @@
 import { PrismaClient, User } from '@prisma/client';
-import { getUserId } from '../../helpers/getUserId';
 import {
     ExistsError,
     GenericNotFound,
     NotFoundForGivenItem,
 } from '../../helpers/error/errorTypes';
+import { getIdFromEmail } from '../../helpers/getIdFromEmail';
 const prisma = new PrismaClient();
 
 type Body = {
@@ -60,18 +60,12 @@ export async function getMainTagByCommissionId({
 
 export async function createMainTag({
     body,
-    token,
+    email,
 }: {
     body: Body;
-    token: string;
+    email: string;
 }) {
-    const user = await prisma.user.findUnique({
-        where: {
-            email: token,
-        },
-    });
-
-    const userId = user?.id;
+    const userId = await getIdFromEmail(email);
 
     const userMainTagExists = await prisma.mainTag.findFirst({
         where: {
@@ -79,7 +73,6 @@ export async function createMainTag({
             name: body.name,
         },
     });
-    console.log(userMainTagExists);
 
     if (userMainTagExists) {
         throw new ExistsError('Main Tag');
@@ -139,7 +132,7 @@ export async function deleteMainTag({
     bodyWithId: BodyWithId;
     email: string;
 }) {
-    const userId = await getUserId({ email });
+    const userId = await getIdFromEmail(email);
 
     if (userId) {
         await prisma.mainTag.delete({

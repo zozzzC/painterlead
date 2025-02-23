@@ -20,7 +20,7 @@ export default function Carousel({
 }) {
   const [index, setIndex] = useState<number>(0);
   const modalRef = useRef<React.JSX.Element>();
-  const [active, toggleActive] = useModal(modalRef);
+  const [active, toggleActive] = useModal();
 
   function nextImage() {
     if (index > images.length - 2) {

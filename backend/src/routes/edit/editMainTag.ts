@@ -53,10 +53,10 @@ router.post(
     checkJwt,
     async (req: express.Request, res: express.Response) => {
         // @ts-ignore
-        const token = req.auth[`email`];
+        const email = req.auth[`email`];
         const body = req.body;
 
-        await createMainTag({ body, token });
+        await createMainTag({ body, email });
         return res.sendStatus(201);
     },
 );

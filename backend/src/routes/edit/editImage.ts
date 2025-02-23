@@ -1,9 +1,9 @@
 import express from 'express';
 const router = express.Router();
 import { signedUrlPut } from '../../helpers/s3';
-import { getUserId } from '../../helpers/getUserId';
 import { PrismaClient } from '@prisma/client';
 import { checkJwt } from '../../middlewares/auth0Jwt';
+import { getIdFromEmail } from '../../helpers/getIdFromEmail';
 const prisma = new PrismaClient();
 
 router.post(
@@ -12,7 +12,7 @@ router.post(
     async (req: express.Request, res: express.Response) => {
         // @ts-ignore
         const email = req?.auth?.email;
-        const userId = await getUserId({ email });
+        const userId = await getIdFromEmail(email);
 
         if (userId) {
             const fileType = req.query.fileType as string;
