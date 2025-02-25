@@ -1,4 +1,5 @@
 "use client";
+import TagBar from "@/components/edit/mainTag/tagBar";
 import { useAuth0 } from "@auth0/auth0-react";
 import { useEffect } from "react";
 import React from "react";
@@ -26,6 +27,7 @@ export default function Test() {
     <div>
       <p>test page</p>
       <button onClick={callApi}>test</button>
+      <TagBar />
     </div>
   );
 }
