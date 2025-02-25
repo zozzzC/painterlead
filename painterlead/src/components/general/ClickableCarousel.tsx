@@ -5,25 +5,21 @@ import { CircleArrowLeft02Icon, CircleArrowRight02Icon } from "hugeicons-react";
 import CommissionModal from "./CommissionModal";
 import useModal from "@/hooks/useModal";
 import React from "react";
-
-type images = {
-  name: string;
-  src: StaticImageData;
-};
+import { commissionImages } from "@/types/commissionImages";
 
 export default function Carousel({
   id,
-  images,
+  commissionImages,
 }: {
   id: Number;
-  images: images[];
+  commissionImages: commissionImages[];
 }) {
   const [index, setIndex] = useState<number>(0);
   const modalRef = useRef<React.JSX.Element>();
   const [active, toggleActive] = useModal();
 
   function nextImage() {
-    if (index > images.length - 2) {
+    if (index > commissionImages.length - 2) {
       setIndex(0);
     } else {
       setIndex(() => index + 1);
@@ -32,7 +28,7 @@ export default function Carousel({
 
   function previousImage() {
     if (index === 0) {
-      setIndex(images.length - 1);
+      setIndex(commissionImages.length - 1);
     } else {
       setIndex(() => index - 1);
     }
@@ -46,7 +42,7 @@ export default function Carousel({
       <Image
         className={"rounded-md"}
         draggable={false}
-        src={images[index].src}
+        src={commissionImages[index].src}
         alt="image"
         fill={true}
         onClick={toggleActive}

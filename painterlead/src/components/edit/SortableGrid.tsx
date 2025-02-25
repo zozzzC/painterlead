@@ -10,7 +10,6 @@ import {
   useSensor,
   MouseSensor,
   TouchSensor,
-  PointerSensor,
 } from "@dnd-kit/core";
 import {
   SortableContext,
@@ -19,45 +18,25 @@ import {
   rectSortingStrategy,
 } from "@dnd-kit/sortable";
 import { useState } from "react";
-import kaveh from "@/test/kaveh.jpg";
-import alhaitham from "@/test/alhaitham.jpg";
-import eula from "@/test/eula.png";
-import kokomi from "@/test/kokomi.png";
+
 import CommissionModal from "../general/CommissionModal";
+import { commissionImages } from "@/types/commissionImages";
 
-const testCommissionData = [
-  {
-    id: 1,
-    name: "1",
-    src: kaveh,
-  },
-  {
-    id: 2,
-    name: "2",
-    src: alhaitham,
-  },
-  {
-    id: 3,
-    name: "3",
-    src: kokomi,
-  },
-  {
-    id: 4,
-    name: "4",
-    src: eula,
-  },
-];
-
-export default function SortableGrid() {
+export default function SortableGrid({
+  commissionImages,
+}: {
+  commissionImages: commissionImages[];
+}) {
   //get the last index of testCommissionData -- must be state since the order of the elements changes using setCommission
-  const [commissions, setCommissions] = useState(testCommissionData);
+  const [commissions, setCommissions] =
+    useState<commissionImages[]>(commissionImages);
 
   const sensors = useSensors(
     useSensor(MouseSensor, {
       activationConstraint: {
-        delay: 500,
-        distance: 20,
-        tolerance: 100,
+        delay: 100,
+        distance: 10,
+        tolerance: 20,
       },
     }),
     useSensor(TouchSensor, {
@@ -100,10 +79,10 @@ export default function SortableGrid() {
               {commissions.map((t) => (
                 <CommissionCard
                   key={t.id}
-                  id={t.id}
-                  name={t.name}
-                  images={testCommissionData}
-                /> //must be state since the order of the elements changes using setCommission
+                  id={parseInt(t.id)}
+                  name={t.id}
+                  commissionImages={commissionImages} //must be state since the order of the elements changes using setCommission
+                />
               ))}
             </Grid>
           </SortableContext>

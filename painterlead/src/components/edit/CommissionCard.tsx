@@ -4,9 +4,10 @@ import { StaticImageData } from "next/image";
 import Image from "next/image";
 import Carousel from "../general/ClickableCarousel";
 import { useState } from "react";
+import { commissionImages } from "@/types/commissionImages";
 
 type images = {
-  id: number;
+  id: string;
   name: string;
   blurb?: string;
   desc?: string;
@@ -16,12 +17,14 @@ type images = {
 export default function CommissionCard({
   id,
   name,
-  images,
+  commissionImages,
+  // mainTag,
   tags,
 }: {
   id: number;
   name: string;
-  images: images[];
+  commissionImages: commissionImages[];
+  // mainTag: string,
   tags?: string;
 }) {
   const { attributes, listeners, setNodeRef, transform, transition } =
@@ -40,7 +43,7 @@ export default function CommissionCard({
     <div className="mx-5">
       <div ref={setNodeRef} {...attributes} {...listeners} style={style}>
         <div className="h-72 rounded-md outline outline-4 relative overflow-hidden m-5">
-          <Carousel id={id} images={images} />
+          <Carousel id={id} commissionImages={commissionImages} />
         </div>
         <div className="m-5">
           <p className="font-bold text-xl">{name}</p>
