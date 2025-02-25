@@ -34,10 +34,23 @@ const testCommissionImageData: commissionImages[] = [
   },
 ];
 
+const testCommissionData = [
+  {
+    id: "1",
+    name: "com 1",
+  },
+  {
+    id: "2",
+    name: "com 2",
+  },
+  {
+    id: "3",
+    name: "com 3",
+  },
+];
+
 export default function Commission() {
-  const [items, setItems] = useState<commissionImages[]>(
-    testCommissionImageData,
-  ); // must be state since the order of the elements changes using setItems
+  const [items, setItems] = useState(testCommissionData); // must be state since the order of the elements changes using setItems
 
   return (
     <div className="ml-sidebar">
@@ -48,8 +61,9 @@ export default function Commission() {
             <CommissionCard
               key={t.id}
               id={t.id}
-              name={t.id}
-              commissionImages={testCommissionImageData} //NOT STATE because these images are independant from the other images in the commissions
+              name={t.name}
+              commissionImages={testCommissionImageData}
+              //NOT STATE because these images are independant from the other images in the commissions
             />
           ))}
           <CommissionAddCard />

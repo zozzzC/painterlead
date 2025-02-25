@@ -1,5 +1,6 @@
 import BigSortButton from "@/components/general/bigSortButton";
 import SmallSortButton from "@/components/general/smallSortButton";
+import CommissionAddCard from "../CommissionAddCard";
 
 export default function TagBar() {
   const testTagData = [
@@ -19,6 +20,7 @@ export default function TagBar() {
       {testTagData.map((i) => (
         <div className="min-w-2 px-5 py-3">
           <SmallSortButton color="">{i.name}</SmallSortButton>
+          <CommissionAddCard />
         </div>
       ))}
     </div>
