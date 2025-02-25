@@ -15,9 +15,11 @@ export default function tagBar() {
   ];
 
   return (
-    <div className="flex">
+    <div className="flex w-full h-20 flex-row">
       {testTagData.map((i) => (
-        <SmallSortButton color="">me</SmallSortButton>
+        <div className="min-w-10 p-10">
+          <SmallSortButton color="">{i.name}</SmallSortButton>
+        </div>
       ))}
     </div>
   );
