@@ -40,7 +40,7 @@ export default function CommissionCard({
   };
 
   return (
-    <div className="mx-5">
+    <div className="mx-5 z-10">
       <div ref={setNodeRef} {...attributes} {...listeners} style={style}>
         <div className="h-72 rounded-md outline outline-4 relative overflow-hidden m-5">
           <Carousel id={parseInt(id)} commissionImages={commissionImages} />

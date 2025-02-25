@@ -9,6 +9,7 @@ import { commissionImages } from "@/types/commissionImages";
 import { Key, useState } from "react";
 import Grid from "@/components/edit/Grid";
 import CommissionCard from "@/components/edit/CommissionCard";
+import CommissionAddCard from "@/components/edit/CommissionAddCard";
 
 const testCommissionImageData: commissionImages[] = [
   {
@@ -48,9 +49,10 @@ export default function Commission() {
               key={t.id}
               id={t.id}
               name={t.id}
-              commissionImages={testCommissionImageData} //must be state since the order of the elements changes using setCommission
+              commissionImages={testCommissionImageData} //NOT STATE because these images are independant from the other images in the commissions
             />
           ))}
+          <CommissionAddCard />
         </Grid>
       </SortableGrid>
     </div>
