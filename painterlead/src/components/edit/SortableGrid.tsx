@@ -18,9 +18,6 @@ import {
 } from "@dnd-kit/sortable";
 import React, { Key, useState } from "react";
 
-import CommissionModal from "../general/CommissionModal";
-import { commissionImages } from "@/types/commissionImages";
-
 /**
  * A generic way of sorting items.
  * @remarks This does not include a grid in itself. The grid used

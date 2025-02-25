@@ -36,7 +36,7 @@ const testCommissionImageData: commissionImages[] = [
 export default function Commission() {
   const [items, setItems] = useState<commissionImages[]>(
     testCommissionImageData,
-  );   // must be state since the order of the elements changes using setItems
+  ); // must be state since the order of the elements changes using setItems
 
   return (
     <div className="ml-sidebar">
@@ -48,7 +48,7 @@ export default function Commission() {
               key={t.id}
               id={t.id}
               name={t.id}
-              commissionImages={items} //must be state since the order of the elements changes using setCommission
+              commissionImages={testCommissionImageData} //must be state since the order of the elements changes using setCommission
             />
           ))}
         </Grid>
