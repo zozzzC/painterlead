@@ -1,6 +1,7 @@
 import BigSortButton from "@/components/general/bigSortButton";
 import SmallSortButton from "@/components/general/smallSortButton";
 import CommissionAddCard from "../CommissionAddCard";
+import { PlusSignCircleIcon } from "hugeicons-react";
 
 export default function TagBar() {
   const testTagData = [
@@ -16,13 +17,15 @@ export default function TagBar() {
   ];
 
   return (
-    <div className="flex w-full h-20 flex-row">
+    <div className="flex w-full items-center h-20 flex-row">
       {testTagData.map((i) => (
-        <div className="min-w-2 px-5 py-3">
+        <div className="min-w-2 px-5  items-center">
           <SmallSortButton color="">{i.name}</SmallSortButton>
-          <CommissionAddCard />
         </div>
       ))}
+      <div className="items-center">
+        <PlusSignCircleIcon size={30} />
+      </div>
     </div>
   );
 }

@@ -10,6 +10,7 @@ import { Key, useState } from "react";
 import Grid from "@/components/edit/Grid";
 import CommissionCard from "@/components/edit/CommissionCard";
 import CommissionAddCard from "@/components/edit/CommissionAddCard";
+import TagBar from "@/components/edit/mainTag/tagBar";
 
 const testCommissionImageData: commissionImages[] = [
   {
@@ -55,6 +56,7 @@ export default function Commission() {
   return (
     <div className="ml-sidebar">
       <Profile />
+      <TagBar />
       <SortableGrid items={items} setItems={setItems}>
         <Grid cols={4}>
           {items.map((t) => (
@@ -63,7 +65,7 @@ export default function Commission() {
               id={t.id}
               name={t.name}
               commissionImages={testCommissionImageData}
-              //NOT STATE because these images are independant from the other images in the commissions
+              //NOT STATE because these images are independent from the other images in the commissions
             />
           ))}
           <CommissionAddCard />
