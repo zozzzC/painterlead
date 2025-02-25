@@ -21,7 +21,7 @@ export default function CommissionCard({
   // mainTag,
   tags,
 }: {
-  id: number;
+  id: string;
   name: string;
   commissionImages: commissionImages[];
   // mainTag: string,
@@ -43,7 +43,7 @@ export default function CommissionCard({
     <div className="mx-5">
       <div ref={setNodeRef} {...attributes} {...listeners} style={style}>
         <div className="h-72 rounded-md outline outline-4 relative overflow-hidden m-5">
-          <Carousel id={id} commissionImages={commissionImages} />
+          <Carousel id={parseInt(id)} commissionImages={commissionImages} />
         </div>
         <div className="m-5">
           <p className="font-bold text-xl">{name}</p>

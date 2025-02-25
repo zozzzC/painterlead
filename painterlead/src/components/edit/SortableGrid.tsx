@@ -79,7 +79,7 @@ export default function SortableGrid({
               {commissions.map((t) => (
                 <CommissionCard
                   key={t.id}
-                  id={parseInt(t.id)}
+                  id={t.id}
                   name={t.id}
                   commissionImages={commissionImages} //must be state since the order of the elements changes using setCommission
                 />

@@ -7,7 +7,7 @@ import eula from "@/test/eula.png";
 import kokomi from "@/test/kokomi.png";
 import { commissionImages } from "@/types/commissionImages";
 
-const testCommissionData: commissionImages[] = [
+const testCommissionImageData: commissionImages[] = [
   {
     sort: 1,
     id: "1",
@@ -34,7 +34,7 @@ export default function Commission() {
   return (
     <div className="ml-sidebar">
       <Profile />
-      <SortableGrid commissionImages={testCommissionData}></SortableGrid>
+      <SortableGrid commissionImages={testCommissionImageData}></SortableGrid>
     </div>
   );
 }
