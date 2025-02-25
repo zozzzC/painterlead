@@ -6,6 +6,9 @@ import alhaitham from "@/test/alhaitham.jpg";
 import eula from "@/test/eula.png";
 import kokomi from "@/test/kokomi.png";
 import { commissionImages } from "@/types/commissionImages";
+import { Key, useState } from "react";
+import Grid from "@/components/edit/Grid";
+import CommissionCard from "@/components/edit/CommissionCard";
 
 const testCommissionImageData: commissionImages[] = [
   {
@@ -31,10 +34,25 @@ const testCommissionImageData: commissionImages[] = [
 ];
 
 export default function Commission() {
+  const [items, setItems] = useState<commissionImages[]>(
+    testCommissionImageData,
+  );   // must be state since the order of the elements changes using setItems
+
   return (
     <div className="ml-sidebar">
       <Profile />
-      <SortableGrid commissionImages={testCommissionImageData}></SortableGrid>
+      <SortableGrid items={items} setItems={setItems}>
+        <Grid cols={4}>
+          {items.map((t) => (
+            <CommissionCard
+              key={t.id}
+              id={t.id}
+              name={t.id}
+              commissionImages={items} //must be state since the order of the elements changes using setCommission
+            />
+          ))}
+        </Grid>
+      </SortableGrid>
     </div>
   );
 }

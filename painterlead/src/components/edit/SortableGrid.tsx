@@ -1,5 +1,3 @@
-"use client";
-
 import CommissionCard from "@/components/edit/CommissionCard";
 import Grid from "@/components/edit/Grid";
 import {
@@ -10,6 +8,7 @@ import {
   useSensor,
   MouseSensor,
   TouchSensor,
+  UniqueIdentifier,
 } from "@dnd-kit/core";
 import {
   SortableContext,
@@ -17,26 +16,33 @@ import {
   arraySwap,
   rectSortingStrategy,
 } from "@dnd-kit/sortable";
-import { useState } from "react";
+import React, { Key, useState } from "react";
 
 import CommissionModal from "../general/CommissionModal";
 import { commissionImages } from "@/types/commissionImages";
 
+/**
+ * A generic way of sorting items.
+ * @remarks This does not include a grid in itself. The grid used
+ * @param children - The collection of sortable items. EG: If we are sorting commissions, a grid with an array of commission image components, ORDERED in the way they will be displayed.
+ * @param items - The array of items that are uniquely identified as different components that are draggable and droppable. EG: it is the same array that is passed into the commission image components.
+ * @param setItems - The set function for the items.
+ */
 export default function SortableGrid({
-  commissionImages,
+  children,
+  items,
+  setItems,
 }: {
-  commissionImages: commissionImages[];
+  children: React.ReactNode;
+  items: any[];
+  setItems: React.Dispatch<React.SetStateAction<any[]>>;
 }) {
-  //get the last index of testCommissionData -- must be state since the order of the elements changes using setCommission
-  const [commissions, setCommissions] =
-    useState<commissionImages[]>(commissionImages);
-
   const sensors = useSensors(
     useSensor(MouseSensor, {
       activationConstraint: {
-        delay: 100,
-        distance: 10,
-        tolerance: 20,
+        delay: 500,
+        distance: 20,
+        tolerance: 100,
       },
     }),
     useSensor(TouchSensor, {
@@ -54,10 +60,14 @@ export default function SortableGrid({
         return;
       }
 
-      setCommissions((commissions) => {
-        const oldIndex = commissions.findIndex((c) => c.id === active.id);
-        const newIndex = commissions.findIndex((c) => c.id === over.id);
-        return arrayMove(commissions, oldIndex, newIndex);
+      setItems((items: any[]) => {
+        const oldIndex = items.findIndex(
+          (c: { id: UniqueIdentifier }) => c.id === active.id,
+        );
+        const newIndex = items.findIndex(
+          (c: { id: UniqueIdentifier }) => c.id === over.id,
+        );
+        return arrayMove(items, oldIndex, newIndex);
       });
     }
   };
@@ -72,19 +82,10 @@ export default function SortableGrid({
           onDragEnd={dragEnd}
         >
           <SortableContext
-            items={commissions} //a sorted array of the unique identifiers associated with the elements that use the useSortable hook within it.
+            items={items} //a sorted array of the unique identifiers associated with the elements that use the useSortable hook within it.
             strategy={rectSortingStrategy}
           >
-            <Grid cols={4}>
-              {commissions.map((t) => (
-                <CommissionCard
-                  key={t.id}
-                  id={t.id}
-                  name={t.id}
-                  commissionImages={commissionImages} //must be state since the order of the elements changes using setCommission
-                />
-              ))}
-            </Grid>
+            {children}
           </SortableContext>
         </DndContext>
       </div>
