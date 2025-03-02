@@ -2,11 +2,17 @@ import BigSortButton from "@/components/general/bigSortButton";
 import SmallSortButton from "@/components/general/smallSortButton";
 import CommissionAddCard from "../CommissionAddCard";
 import { PlusSignCircleIcon } from "hugeicons-react";
-import React, { useState, useRef, KeyboardEventHandler, MutableRefObject } from "react";
+import React, {
+  useState,
+  useRef,
+  KeyboardEventHandler,
+  MutableRefObject,
+  useEffect,
+} from "react";
+import { createNewMainTag } from "@/app/api/mainTag";
 
 export default function TagBar() {
   const [newTag, setNewTag] = useState<boolean>(false);
-  const inputRef = useRef<HTMLInputElement>(null);
 
   const testTagData = [
     {
@@ -36,7 +42,7 @@ export default function TagBar() {
           <input
             type="text"
             className="outline py-1 px-3 rounded-xl outline-10 bg-transparent"
-            ref={inputRef}
+            onBlur={createNewMainTag}
           ></input>
         ) : (
           <button className="items-center" onClick={showNewTag}>
