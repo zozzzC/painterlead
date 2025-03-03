@@ -6,6 +6,8 @@ import { Outfit } from "next/font/google";
 import Footer from "@/components/layout/footer";
 import React from "react";
 import AuthProvider from "@/components/AuthProvider";
+import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
+import { useQueryClient } from "react-query";
 
 const outfit = Outfit({
   weight: "400",
@@ -17,6 +19,7 @@ export const metadata: Metadata = {
   description:
     "a new-era art search and commission platform. by artists, for artists.",
 };
+
 
 export default function RootLayout({
   children,

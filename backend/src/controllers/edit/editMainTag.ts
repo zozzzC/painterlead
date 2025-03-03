@@ -78,6 +78,9 @@ export async function createMainTag({
         throw new ExistsError('Main Tag');
     }
 
+    console.log(body.name);
+    console.log(userId);
+
     if (userId) {
         await prisma.mainTag.create({
             data: {

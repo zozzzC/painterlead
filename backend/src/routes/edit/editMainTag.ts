@@ -31,7 +31,6 @@ router.get(
             const result = await getMainTag({ id });
             return res.status(200).json(result);
         }
-        return res.sendStatus(500);
     },
 );
 
@@ -55,7 +54,6 @@ router.post(
         // @ts-ignore
         const email = req.auth[`email`];
         const body = req.body;
-
         await createMainTag({ body, email });
         return res.sendStatus(201);
     },

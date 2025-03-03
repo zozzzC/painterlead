@@ -3,6 +3,9 @@ import TagBar from "@/components/edit/mainTag/tagBar";
 import { useAuth0 } from "@auth0/auth0-react";
 import { useEffect } from "react";
 import React from "react";
+import { QueryClientProvider, QueryClient } from "react-query";
+
+const queryClient = new QueryClient();
 
 export default function Test() {
   const { getAccessTokenSilently } = useAuth0();
@@ -24,10 +27,12 @@ export default function Test() {
   };
 
   return (
-    <div>
-      <p>test page</p>
-      <button onClick={callApi}>test</button>
-      <TagBar />
-    </div>
+    <QueryClientProvider client={queryClient}>
+      <div>
+        <p>test page</p>
+        <button onClick={callApi}>test</button>
+        <TagBar />
+      </div>
+    </QueryClientProvider>
   );
 }
