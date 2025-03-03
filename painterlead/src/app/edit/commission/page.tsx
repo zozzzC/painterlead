@@ -56,7 +56,6 @@ export default function Commission() {
   return (
     <div className="ml-sidebar">
       <Profile />
-      <TagBar />
       <SortableGrid items={items} setItems={setItems}>
         <Grid cols={4}>
           {items.map((t) => (

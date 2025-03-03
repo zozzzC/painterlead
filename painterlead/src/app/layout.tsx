@@ -22,7 +22,26 @@ export const metadata: Metadata = {
     "a new-era art search and commission platform. by artists, for artists.",
 };
 
-const theme = createTheme({});
+const theme = createTheme({
+  colors: {
+    darkGrey: [
+      "#6e6e6e",
+      "#595959",
+      "#474747",
+      "#404040",
+      "#3d3d3d",
+      "#2e2e2e",
+      "#2b2b2b",
+      "#141414",
+      "",
+      "",
+    ],
+  },
+  shadows: {
+    md: "1px 1px 3px rgba(0, 0, 0, .25)",
+    xl: "5px 5px 3px rgba(0, 0, 0, .25)",
+  },
+});
 
 export default function RootLayout({
   children,
@@ -31,13 +50,13 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en">
-      <MantineProvider theme={theme}>
-        <AuthProvider>
-          <body className={outfit.className}>
+      <AuthProvider>
+        <body className={outfit.className}>
+          <MantineProvider theme={theme}>
             <div className="h-full">{children}</div>
-          </body>
-        </AuthProvider>
-      </MantineProvider>
+          </MantineProvider>
+        </body>
+      </AuthProvider>
     </html>
   );
 }
