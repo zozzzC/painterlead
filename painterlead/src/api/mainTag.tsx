@@ -9,7 +9,7 @@ import {
 
 export async function createNewMainTag(name: string, token: string) {
   console.log("creating new tag...");
-  console.log(token);
+  console.log(token)
   const res = await fetch("http://localhost:4321/edit/mainTag", {
     method: "POST",
     headers: {
