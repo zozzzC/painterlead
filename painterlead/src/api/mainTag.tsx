@@ -6,10 +6,10 @@ import {
   useMutation,
   useQuery,
 } from "@tanstack/react-query";
+import axios from "axios";
 
 export async function createNewMainTag(name: string, token: string) {
   console.log("creating new tag...");
-  console.log(token)
   const res = await fetch("http://localhost:4321/edit/mainTag", {
     method: "POST",
     headers: {
@@ -22,4 +22,15 @@ export async function createNewMainTag(name: string, token: string) {
   });
 
   return await res.json();
+}
+
+export async function getMainTag(token: string) {
+  console.log("getting tags...");
+  const res = await axios.get("http://localhost:4321/edit/mainTag", {
+    headers: {
+      authorization: `Bearer ${token}`,
+    },
+  });
+
+  return res.data;
 }

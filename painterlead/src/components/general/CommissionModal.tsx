@@ -7,13 +7,7 @@ import SmallSortButton from "./smallSortButton";
 import React, { useRef, useState } from "react";
 import getPresignedUrl from "@/functions/getPresignedUrl";
 
-export default function CommissionModal({
-  id,
-  toggleActive,
-}: {
-  id: Number;
-  toggleActive: () => void;
-}) {
+export default function CommissionModal({ id }: { id: Number }) {
   const [editImage, setEditImage] = useState<boolean>(false);
   const inputFile = useRef<HTMLInputElement | null>(null);
   const { getAccessTokenSilently, isAuthenticated } = useAuth0();
@@ -55,7 +49,7 @@ export default function CommissionModal({
   }
 
   return (
-    <div className="z-10 fixed left-0 top-0 flex box-border items-center justify-center h-full w-full bg-lightest-grey bg-opacity-50">
+    <div className="flex items-center justify-center">
       <input
         type="file"
         ref={inputFile}
@@ -63,12 +57,7 @@ export default function CommissionModal({
         accept=".png,.jpeg"
         onChange={handleFileChange}
       ></input>
-      <div className="relative outline-lightest-grey outline outline-4 rounded-md h-5/6 w-5/6 bg-dark-grey">
-        <div className="z-20 absolute right-0 m-5">
-          <button onClick={toggleActive}>
-            <CancelCircleIcon size={30} />
-          </button>
-        </div>
+      <div className="relative rounded-md ">
         <div className="grid grid-cols-2 place-items-center h-full">
           <div className="px-3">
             {/* this should be replaced with a carousel later on. */}

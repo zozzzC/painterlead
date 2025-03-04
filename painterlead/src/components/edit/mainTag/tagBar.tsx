@@ -10,9 +10,9 @@ import React, {
   MutableRefObject,
   useEffect,
 } from "react";
-import { createNewMainTag } from "@/api/mainTag";
+import { createNewMainTag, getMainTag } from "@/api/mainTag";
 import { useAuth0 } from "@auth0/auth0-react";
-import { useMutation } from "react-query";
+import { useMutation, useQuery, UseQueryResult } from "react-query";
 import { useQueryClient } from "react-query";
 
 export default function TagBar() {
@@ -46,12 +46,16 @@ export default function TagBar() {
     }
   }
 
-  const { error, data, mutate } = useMutation({
+  const { mutate } = useMutation({
     mutationFn: async () => createNewMainTag(inputText, await token),
     onSuccess: () => {
-      // Invalidate and refetch
-      queryClient.invalidateQueries({ queryKey: ["todos"] });
+      queryClient.invalidateQueries({ queryKey: ["getMainTag"] });
     },
+  });
+
+  const getMainTagQ: UseQueryResult<any, unknown> = useQuery({
+    queryKey: ["getMainTag"],
+    queryFn: async () => getMainTag(await token),
   });
 
   function showNewTag() {
@@ -60,11 +64,13 @@ export default function TagBar() {
 
   return (
     <div className="flex w-full items-center h-20 flex-row">
-      {tags.map((i) => (
-        <div className="min-w-2 m-2 px-5 items-center">
-          <SmallSortButton color="">{i.name}</SmallSortButton>
-        </div>
-      ))}
+      {getMainTagQ.data?.map((i: any) => {
+        return (
+          <div className="min-w-2 m-2 px-5 items-center">
+            <SmallSortButton color="">{i.name}</SmallSortButton>
+          </div>
+        );
+      })}
       <div className="min-w-2 m-2 px-5 items-center flex bg-transparent">
         {newTag ? (
           <input

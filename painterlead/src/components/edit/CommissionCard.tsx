@@ -4,9 +4,11 @@ import { StaticImageData } from "next/image";
 import NextImage from "next/image";
 // import Carousel from "../general/ClickableCarousel";
 import { Carousel } from "@mantine/carousel";
-import { Image } from "@mantine/core";
+import { Image, Modal, ScrollArea } from "@mantine/core";
 import { useState } from "react";
 import { commissionImages } from "@/types/commissionImages";
+import { useDisclosure } from "@mantine/hooks";
+import CommissionModal from "../general/CommissionModal";
 
 type images = {
   id: string;
@@ -34,6 +36,9 @@ export default function CommissionCard({
       id: id,
     });
 
+  const [opened, { open, close }] = useDisclosure(false);
+  const [clickedId, setClickedId] = useState<string>("0");
+
   const style: React.CSSProperties = {
     transition,
     transform: CSS.Transform.toString(transform),
@@ -43,9 +48,18 @@ export default function CommissionCard({
 
   return (
     <div className="mx-5 z-10">
+      <Modal
+        size="auto"
+        opened={opened}
+        onClose={close}
+        withCloseButton={true}
+        centered
+        scrollAreaComponent={ScrollArea.Autosize}
+      >
+        <CommissionModal id={parseInt(clickedId)} />
+      </Modal>
       <div ref={setNodeRef} {...attributes} {...listeners} style={style}>
         <div className="h-72 flex rounded-md outline outline-4 relative overflow-hidden m-5">
-          {/* <Carousel id={parseInt(id)} commissionImages={commissionImages} /> */}
           <Carousel
             dragFree
             draggable={false}
@@ -54,11 +68,12 @@ export default function CommissionCard({
             loop
             align="start"
             className="h-72 overflow-hidden flex"
-            // height="100%"
-            // className="flex-1"
           >
             {commissionImages.map((i) => (
-              <Carousel.Slide key={parseInt(i.id)}>
+              <Carousel.Slide
+                key={parseInt(i.id)}
+                onClick={() => (open(), setClickedId(i.id))}
+              >
                 <Image
                   component={NextImage}
                   draggable={false}
