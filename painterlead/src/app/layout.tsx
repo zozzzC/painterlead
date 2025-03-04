@@ -10,6 +10,7 @@ import AuthProvider from "@/components/AuthProvider";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { useQueryClient } from "react-query";
 import { createTheme, MantineProvider } from "@mantine/core";
+import "@mantine/carousel/styles.css";
 
 const outfit = Outfit({
   weight: "400",

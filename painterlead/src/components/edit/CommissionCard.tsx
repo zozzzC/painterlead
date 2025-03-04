@@ -1,8 +1,10 @@
 import { useSortable } from "@dnd-kit/sortable";
 import { CSS } from "@dnd-kit/utilities";
 import { StaticImageData } from "next/image";
-import Image from "next/image";
-import Carousel from "../general/ClickableCarousel";
+import NextImage from "next/image";
+// import Carousel from "../general/ClickableCarousel";
+import { Carousel } from "@mantine/carousel";
+import { Image } from "@mantine/core";
 import { useState } from "react";
 import { commissionImages } from "@/types/commissionImages";
 
@@ -42,8 +44,31 @@ export default function CommissionCard({
   return (
     <div className="mx-5 z-10">
       <div ref={setNodeRef} {...attributes} {...listeners} style={style}>
-        <div className="h-72 rounded-md outline outline-4 relative overflow-hidden m-5">
-          <Carousel id={parseInt(id)} commissionImages={commissionImages} />
+        <div className="h-72 flex rounded-md outline outline-4 relative overflow-hidden m-5">
+          {/* <Carousel id={parseInt(id)} commissionImages={commissionImages} /> */}
+          <Carousel
+            dragFree
+            draggable={false}
+            withIndicators
+            slideSize="100%"
+            loop
+            align="start"
+            className="h-72 overflow-hidden flex"
+            // height="100%"
+            // className="flex-1"
+          >
+            {commissionImages.map((i) => (
+              <Carousel.Slide key={parseInt(i.id)}>
+                <Image
+                  component={NextImage}
+                  draggable={false}
+                  src={i.src}
+                  alt="image"
+                  className="h-72"
+                />
+              </Carousel.Slide>
+            ))}
+          </Carousel>
         </div>
         <div className="m-5">
           <p className="font-bold text-xl">{name}</p>
