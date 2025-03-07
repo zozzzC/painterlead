@@ -18,36 +18,21 @@ import { useQueryClient } from "react-query";
 export default function TagBar() {
   const queryClient = useQueryClient();
   const [newTag, setNewTag] = useState<boolean>(false);
-  const [tags, setTags] = useState([
-    {
-      name: "test1",
-    },
-    {
-      name: "test2",
-    },
-    {
-      name: "example of something super super long",
-    },
-  ]);
   const inputRef = useRef<HTMLInputElement>(null);
+  const [token, setToken] = useState<string>("");
   const [inputText, setInputText] = useState<string>("");
+  const { getAccessTokenSilently } = useAuth0();
 
-  const getAccessToken = async () => {
-    const { getAccessTokenSilently } = useAuth0();
-    const token = await getAccessTokenSilently();
-    return token;
-  };
-
-  const token = getAccessToken();
-
-  function updateTags() {
-    if (inputText.length != 0) {
-      setTags(() => [...tags, { name: inputText }]);
-    }
-  }
+  useEffect(() => {
+    const getAccessToken = async () => {
+      const token = await getAccessTokenSilently();
+      setToken(token);
+    };
+    getAccessToken();
+  }, []);
 
   const { mutate } = useMutation({
-    mutationFn: async () => createNewMainTag(inputText, await token),
+    mutationFn: async () => createNewMainTag(inputText, token),
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ["getMainTag"] });
     },
@@ -55,7 +40,8 @@ export default function TagBar() {
 
   const getMainTagQ: UseQueryResult<any, unknown> = useQuery({
     queryKey: ["getMainTag"],
-    queryFn: async () => getMainTag(await token),
+    queryFn: async () => getMainTag(token),
+    enabled: !!token,
   });
 
   function showNewTag() {
@@ -71,25 +57,27 @@ export default function TagBar() {
           </div>
         );
       })}
-      <div className="min-w-2 m-2 px-5 items-center flex bg-transparent">
-        {newTag ? (
-          <input
-            type="text"
-            className="outline py-1 px-3 rounded-xl outline-10 bg-transparent"
-            ref={inputRef}
-            onKeyUp={() =>
-              setInputText(
-                inputRef.current?.value ? inputRef.current?.value : "",
-              )
-            }
-            onBlur={() => mutate()}
-          ></input>
-        ) : (
-          <button className="items-center" onClick={showNewTag}>
-            <PlusSignCircleIcon size={30} />
-          </button>
-        )}
-      </div>
+      {token ? (
+        <div className="min-w-2 m-2 px-5 items-center flex bg-transparent">
+          {newTag ? (
+            <input
+              type="text"
+              className="outline py-1 px-3 rounded-xl outline-10 bg-transparent"
+              ref={inputRef}
+              onKeyUp={() =>
+                setInputText(
+                  inputRef.current?.value ? inputRef.current?.value : "",
+                )
+              }
+              onBlur={() => mutate()}
+            ></input>
+          ) : (
+            <button className="items-center" onClick={showNewTag}>
+              <PlusSignCircleIcon size={30} />
+            </button>
+          )}
+        </div>
+      ) : undefined}
     </div>
   );
 }

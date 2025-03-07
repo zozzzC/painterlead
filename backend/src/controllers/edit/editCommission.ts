@@ -63,8 +63,14 @@ export async function createCommission({
 
 }
 
-export function putCommission() {}
+export function putCommission() {
 
-export function patchCommission() {}
+}
 
-export function deleteCommission() {}
+export function patchCommission() {
+
+}
+
+export function deleteCommission() {
+    
+}
