@@ -14,11 +14,13 @@ import { createNewMainTag, getMainTag } from "@/api/mainTag";
 import { useAuth0 } from "@auth0/auth0-react";
 import { useMutation, useQuery, UseQueryResult } from "react-query";
 import { useQueryClient } from "react-query";
+import { AxiosError } from "axios";
 
 export default function TagBar() {
   const queryClient = useQueryClient();
   const [newTag, setNewTag] = useState<boolean>(false);
   const inputRef = useRef<HTMLInputElement>(null);
+  const [inputError, setInputError] = useState<string>("");
   const [token, setToken] = useState<string>("");
   const [inputText, setInputText] = useState<string>("");
   const { getAccessTokenSilently } = useAuth0();
@@ -35,6 +37,9 @@ export default function TagBar() {
     mutationFn: async () => createNewMainTag(inputText, token),
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ["getMainTag"] });
+    },
+    onError: (error: AxiosError) => {
+      setInputError(error.message);
     },
   });
 
@@ -70,6 +75,7 @@ export default function TagBar() {
                 )
               }
               onBlur={() => mutate()}
+              required
             ></input>
           ) : (
             <button className="items-center" onClick={showNewTag}>
