@@ -15,11 +15,14 @@ import { useAuth0 } from "@auth0/auth0-react";
 import { useMutation, useQuery, UseQueryResult } from "react-query";
 import { useQueryClient } from "react-query";
 import { AxiosError } from "axios";
+import { Fascinate } from "next/font/google";
+import InputError from "@/components/error/InputError";
 
 export default function TagBar() {
   const queryClient = useQueryClient();
   const [newTag, setNewTag] = useState<boolean>(false);
   const inputRef = useRef<HTMLInputElement>(null);
+  const [error, setError] = useState<boolean>(false);
   const [inputError, setInputError] = useState<string>("");
   const [token, setToken] = useState<string>("");
   const [inputText, setInputText] = useState<string>("");
@@ -39,6 +42,7 @@ export default function TagBar() {
       queryClient.invalidateQueries({ queryKey: ["getMainTag"] });
     },
     onError: (error: AxiosError) => {
+      setError(true);
       setInputError(error.message);
     },
   });
@@ -82,6 +86,7 @@ export default function TagBar() {
               <PlusSignCircleIcon size={30} />
             </button>
           )}
+          {error ? <InputError errorMessage={inputError} /> : null}
         </div>
       ) : undefined}
     </div>

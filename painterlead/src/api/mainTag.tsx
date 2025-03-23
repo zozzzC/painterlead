@@ -20,8 +20,6 @@ export async function createNewMainTag(name: string, token: string) {
       name: name,
     }),
   });
-
-  return await res.json();
 }
 
 export async function getMainTag(token: string) {

@@ -1,5 +1,5 @@
 "use client";
-import TagBar from "@/components/edit/mainTag/tagBar";
+import TagBar from "@/components/edit/mainTag/TagBar";
 import { useAuth0 } from "@auth0/auth0-react";
 import { useEffect } from "react";
 import React from "react";
